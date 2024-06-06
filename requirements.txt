@@ -1,0 +1,12 @@
+flask
+python-dotenv
+openai
+aiohttp
+requests
+langchain 
+langchain_experimental
+langchain-google-genai
+google-generativeai
+langchain-community
+pypdf
+chromadb
