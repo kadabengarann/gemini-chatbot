@@ -7,7 +7,6 @@ from app.services import gemini_service
 # from app.services.openai_service import generate_response
 import re
 
-
 def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
     logging.info(f"Content-type: {response.headers.get('content-type')}")
@@ -27,7 +26,6 @@ def get_text_message_input(recipient, text):
 
 
 def generate_response(response):
-    # Return text in uppercase
     docs = gemini_service.vector_index.get_relevant_documents(response)
     
     stuff_answer = gemini_service.stuff_chain(
@@ -37,7 +35,6 @@ def generate_response(response):
     if "does not mention" in assistant_response:
         assistant_response = "answer not available in context"
 
-    print(f"Raw stuff_chain response: {stuff_answer}")  # Debugging line
     print(f"Assistant response: {assistant_response}")  # Debugging line
     
     return assistant_response

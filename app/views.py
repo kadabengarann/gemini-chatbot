@@ -110,6 +110,6 @@ def chat():
     if "does not mention" in assistant_response:
         assistant_response = "answer not available in context"
 
-    print(f"Raw stuff_chain response: {stuff_answer}")  # Debugging line
+    # print(f"Raw stuff_chain response: {stuff_answer}")  # Debugging line
     print(f"Assistant response: {assistant_response}")  # Debugging line
     return jsonify({"response": assistant_response})
