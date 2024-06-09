@@ -2,9 +2,10 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
-from app.services import gemini_service 
+from app.services.gemini_service  import generate_response
 
 # from app.services.openai_service import generate_response
+
 import re
 
 def log_http_response(response):
@@ -23,22 +24,6 @@ def get_text_message_input(recipient, text):
             "text": {"preview_url": False, "body": text},
         }
     )
-
-
-def generate_response(response):
-    docs = gemini_service.vector_index.get_relevant_documents(response)
-    
-    stuff_answer = gemini_service.stuff_chain(
-        {"input_documents": docs, "question": response}, return_only_outputs=False
-    )
-    assistant_response = stuff_answer['output_text']
-    if "does not mention" in assistant_response:
-        assistant_response = "answer not available in context"
-
-    print(f"Assistant response: {assistant_response}")  # Debugging line
-    
-    return assistant_response
-
 
 def send_message(data):
     headers = {

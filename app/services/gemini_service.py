@@ -20,7 +20,7 @@ texts = text_splitter.split_text(context)
 
 vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
 
-prompt_template = """You are a assistant for answering question. Answer the question using the context data and answer it in the style of a professional.
+prompt_template = """You are a assistant for answering question. Answer the question using the context data and answer it.
 
 Context: 
 {context}
@@ -37,3 +37,17 @@ prompts = PromptTemplate(
 
 
 stuff_chain = load_qa_chain(model, chain_type="stuff", prompt=prompts)
+
+def generate_response(response):
+    docs = vector_index.get_relevant_documents(response)
+
+    stuff_answer = stuff_chain(
+        {"input_documents": docs, "question": response}, return_only_outputs=False
+    )
+    assistant_response = stuff_answer['output_text']
+    if "does not mention" in assistant_response:
+        assistant_response = "answer not available in context"
+
+    print(f"Assistant response: {assistant_response}")  # Debugging line
+
+    return assistant_response
