@@ -12,3 +12,5 @@ google-generativeai
 langchain-community
 pypdf
 chromadb
+mysql-connector-python
+mysqlclient
