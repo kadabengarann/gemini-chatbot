@@ -1,4 +1,5 @@
 import warnings
+from flask import current_app
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -9,7 +10,6 @@ from app.datasource import remote_datasource as datasource
 # from app.datasource import local_datasource as datasource
 
 warnings.filterwarnings("ignore")
-
 model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3) #gemini-1.5-pro
 # model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.3) #gemini-1.5-pro
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
