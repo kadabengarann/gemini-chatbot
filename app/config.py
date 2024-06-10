@@ -14,6 +14,8 @@ def load_configurations(app):
     app.config["VERIFY_TOKEN"] = os.getenv('VERIFY_TOKEN', os.environ.get('VERIFY_TOKEN'))
     app.config["MODEL_NAME"] = os.getenv('MODEL_NAME', os.environ.get('MODEL_NAME'))
     app.config["GOOGLE_API_KEY"] = os.getenv('GOOGLE_API_KEY', os.environ.get('GOOGLE_API_KEY'))
+    os.environ['GOOGLE_API_KEY'] = "AIzaSyD8pq4yrarEq_GUKF56UTXfAoGlysC6CEo"
+    print(f' GOOGLE KEY {app.config["GOOGLE_API_KEY"]}')
 
 
 def configure_logging():
