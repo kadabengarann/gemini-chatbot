@@ -1,11 +1,11 @@
 modules = ["python-3.12"]
-run = "python run.py"
+run = "python main.py"
 
 [nix]
 channel = "stable-23_11"
 
 [deployment]
-run = ["python3", "run.py"]
+run = ["python3", "main.py"]
 
 [[ports]]
 localPort = 8000
