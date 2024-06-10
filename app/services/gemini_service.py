@@ -64,9 +64,10 @@ format_instructions = ""
 format_instructions = (
     format_instructions or react_prompt.FORMAT_INSTRUCTIONS
 )
+prompt_prefix = "You are a assistant for a system to answering users question. Answer the following questions in professional way. You have access to the following tools:"
 template = "\n\n".join(
     [
-        react_prompt.PREFIX,
+        prompt_prefix,
         "{tools}",
         format_instructions,
         react_prompt.SUFFIX,
