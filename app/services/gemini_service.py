@@ -10,7 +10,8 @@ from app.datasource import remote_datasource as datasource
 
 warnings.filterwarnings("ignore")
 
-model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.3)
+model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3) #gemini-1.5-pro
+# model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.3) #gemini-1.5-pro
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
@@ -20,7 +21,7 @@ texts = text_splitter.split_text(context)
 
 vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
 
-prompt_template = """You are a assistant for answering question. Answer the question using the context data and answer it.
+prompt_template = """You are a assistant for a system to answering users question. Answer the question using the context data and answer it in professional way. If answer include a date format it should be in the format including day of the week that easily undestandable.
 
 Context: 
 {context}
@@ -48,6 +49,7 @@ def generate_response(response):
     if "does not mention" in assistant_response:
         assistant_response = "answer not available in context"
 
+    # print(f"Raw stuff_chain response: {stuff_answer}")  # Debugging line
     print(f"Assistant response: {assistant_response}")  # Debugging line
 
     return assistant_response

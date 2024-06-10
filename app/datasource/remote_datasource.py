@@ -15,7 +15,7 @@ params = {
 response = requests.get(url)
 
 if response.status_code == 200:
-    data = response #check if response in json form => data = response.json()
+    data = response.text #check if response in json form => data = response.json()
     data_context = data
 else:
     print(f"Request failed with status code: {response.status_code}")

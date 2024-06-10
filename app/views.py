@@ -10,6 +10,8 @@ from .utils.whatsapp_utils import (
 )
 
 from app.services import gemini_service 
+from app.services.gemini_service  import generate_response
+
 
 webhook_blueprint = Blueprint("webhook", __name__)
 
@@ -91,6 +93,10 @@ def webhook_post():
 
 
 # New routes
+@webhook_blueprint.route('/', methods=['GET'])
+def hello():
+    return jsonify({"IsSuccess": True})
+    
 @webhook_blueprint.route('/start', methods=['GET'])
 def start_conversation():
     print("Starting a new conversation...")
@@ -101,15 +107,7 @@ def chat():
     data = request.json
     user_input = data.get('message', '')
 
-    docs = gemini_service.vector_index.get_relevant_documents(user_input)
+    assistant_response = generate_response(user_input)
 
-    stuff_answer = gemini_service.stuff_chain(
-        {"input_documents": docs, "question": user_input}, return_only_outputs=False
-    )
-    assistant_response = stuff_answer['output_text']
-    if "does not mention" in assistant_response:
-        assistant_response = "answer not available in context"
-
-    # print(f"Raw stuff_chain response: {stuff_answer}")  # Debugging line
     print(f"Assistant response: {assistant_response}")  # Debugging line
     return jsonify({"response": assistant_response})
