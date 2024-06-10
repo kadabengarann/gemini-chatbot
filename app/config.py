@@ -13,9 +13,12 @@ def load_configurations(app):
     app.config["PHONE_NUMBER_ID"] = os.getenv('PHONE_NUMBER_ID', os.environ.get('PHONE_NUMBER_ID'))
     app.config["VERIFY_TOKEN"] = os.getenv('VERIFY_TOKEN', os.environ.get('VERIFY_TOKEN'))
     app.config["MODEL_NAME"] = os.getenv('MODEL_NAME', os.environ.get('MODEL_NAME'))
-    app.config['GOOGLE_API_KEY'] = "AIzaSyD8pq4yrarEq_GUKF56UTXfAoGlysC6CEo"
-    os.environ['GOOGLE_API_KEY'] = app.config['GOOGLE_API_KEY']
-    print(f' GOOGLE KEY {os.environ["GOOGLE_API_KEY"]}')
+    app.config["DB_URI"] = os.getenv('DB_URI', os.environ.get('DB_URI'))
+    app.config["IS_USING_DB"] = os.environ.get('IS_USING_DB')
+    if app.config["IS_USING_DB"] == "False":
+        app.config["IS_USING_DB"] = False
+    else:
+        app.config["IS_USING_DB"] = True
 
 
 def configure_logging():
