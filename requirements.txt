@@ -1,4 +1,6 @@
 flask
+wheel
+gunicorn
 python-dotenv
 openai
 aiohttp
