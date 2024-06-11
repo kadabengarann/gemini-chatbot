@@ -1,5 +1,6 @@
 import warnings
 import os
+import app.services.prompt as prompt
 from dotenv import load_dotenv
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
@@ -7,8 +8,8 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-from langchain.agents.mrkl import prompt as react_prompt
 from langchain.agents import AgentType, create_sql_agent
+
 warnings.filterwarnings("ignore")
 
 # Configuration
@@ -19,7 +20,7 @@ if IS_USING_DB == 'False':
 else:
     IS_USING_DB = True
 
-print(f'type {type(IS_USING_DB)} {IS_USING_DB}')
+print(f'Is Using SB {type(IS_USING_DB)} {IS_USING_DB}')
 
 if IS_USING_DB:
     # Import modules or execute code for when IS_USING_DB is True
@@ -27,7 +28,7 @@ if IS_USING_DB:
 else:
     from app.datasource import remote_datasource as datasource
     
-model_name = "gemini-1.5-flash" #gemini-1.5-pro
+model_name = os.environ.get('MODEL_NAME')
 agent = None
 stuff_chain = None
 
@@ -39,37 +40,13 @@ context = str(datasource.data_context)
 texts = text_splitter.split_text(context)
 vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
 
-#Promt for text based
-prompt_template = """You are a assistant for a system to answering users question. Answer the question using the context data and answer it in professional way. If answer include a date format it should be in the format including day of the week that easily undestandable.
-
-Context: 
-{context}
-
-Question: 
-{question}
-
-Answer:
-"""
-
 #Promt for SQL based
-prompt_prefix = "You are a assistant for a system to answering users question. Answer the following questions as best you can. You have access to the following tools:"
-format_instructions = """Use the following format:
-
-Question: the input question you must answer
-Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
-Action Input: the input to the action
-Observation: the result of the action
-... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now know the final answer
-Final Answer: the final answer to the original input question and tell it as professional customer service style"""
-
 template = "\n\n".join(
     [
-        prompt_prefix, 
+        prompt.PREFIX, 
         "{tools}",
-        format_instructions,
-        react_prompt.SUFFIX,
+        prompt.FORMAT_INSTRUCTIONS,
+        prompt.SUFFIX,
     ]
 )
 
@@ -78,7 +55,7 @@ if IS_USING_DB:
     agent = create_sql_agent(llm=model, toolkit=db_datasource.get_toolkit(model),    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, prompt=prompt, verbose=True)
 else:
     prompts = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
+        template=prompt.ALL_PROMPT, input_variables=["context", "question"]
     )
     stuff_chain = load_qa_chain(model, chain_type="stuff", prompt=prompts)
 
