@@ -8,7 +8,7 @@ Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
-Final Answer: the final answer to the original input question and tell it as professional customer service style"""
+Final Answer: the final answer to the original input question and tell it as professional customer service style and prevent showing any sensitive data"""
 SUFFIX = """Begin!
 
 Question: {input}
