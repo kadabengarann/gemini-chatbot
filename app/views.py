@@ -111,3 +111,12 @@ def chat():
 
     print(f"Assistant response: {assistant_response}")  # Debugging line
     return jsonify({"response": assistant_response})
+
+@webhook_blueprint.route('/testing', methods=['GET'])
+def testing():
+    user_input = "give me one of the user's name"
+
+    assistant_response = generate_response(user_input)
+
+    print(f"Assistant response: {assistant_response}")  # Debugging line
+    return jsonify({"response": assistant_response})
