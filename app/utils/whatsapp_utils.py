@@ -82,7 +82,7 @@ def process_whatsapp_message(body):
 
     # OpenAI Integration
     # response = generate_response(message_body, wa_id, name)
-    # response = process_text_for_whatsapp(response)
+    response = process_text_for_whatsapp(response)
 
     data = get_text_message_input(wa_id, response)
     send_message(data)

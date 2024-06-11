@@ -119,4 +119,6 @@ def testing():
     assistant_response = generate_response(user_input)
 
     print(f"Assistant response: {assistant_response}")  # Debugging line
-    return jsonify({"response": assistant_response})
+    return jsonify({"response": assistant_response,
+                    "model-name": current_app.config['MODEL_NAME']
+                   })
