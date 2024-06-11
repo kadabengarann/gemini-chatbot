@@ -10,7 +10,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.agents import AgentType, create_sql_agent
 
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Configuration
 load_dotenv()
@@ -35,10 +35,11 @@ stuff_chain = None
 # Initialization
 model = ChatGoogleGenerativeAI(model=model_name, temperature=0.3)
 embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
-context = str(datasource.data_context)
-texts = text_splitter.split_text(context)
-vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
+if not IS_USING_DB:
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
+    context = str(datasource.data_context)
+    texts = text_splitter.split_text(context)
+    vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
 
 #Promt for SQL based
 template = "\n\n".join(
