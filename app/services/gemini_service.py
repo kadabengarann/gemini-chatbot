@@ -53,7 +53,7 @@ template = "\n\n".join(
 
 if IS_USING_DB:
     prompt = PromptTemplate.from_template(template)
-    agent = create_sql_agent(llm=model, toolkit=datasource.get_toolkit(model),    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, prompt=prompt, verbose=True)
+    agent = create_sql_agent(llm=model, toolkit=datasource.get_toolkit(model),    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, prompt=prompt, verbose=True, handle_parsing_errors=True)
 else:
     prompts = PromptTemplate(
         template=prompt.ALL_PROMPT, input_variables=["context", "question"]
