@@ -78,7 +78,7 @@ def process_whatsapp_message(body):
     message_body = message["text"]["body"]
 
     # TODO: implement custom function here
-    response = generate_response(message_body)
+    response = generate_response(message_body, wa_id)
     if not response:
         return False
 

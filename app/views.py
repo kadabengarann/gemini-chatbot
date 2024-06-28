@@ -106,7 +106,7 @@ def chat():
     data = request.json
     user_input = data.get('message', '')
 
-    assistant_response = generate_response(user_input)
+    assistant_response = generate_response(user_input, "temp_Id")
     if not assistant_response:
         assistant_response = "Sorry, you are not authorized to use this service."
 
