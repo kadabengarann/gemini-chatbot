@@ -12,7 +12,6 @@ from .utils.whatsapp_utils import (
 from app.services import gemini_service 
 from app.services.gemini_service  import generate_response
 
-
 webhook_blueprint = Blueprint("webhook", __name__)
 
 
@@ -108,6 +107,8 @@ def chat():
     user_input = data.get('message', '')
 
     assistant_response = generate_response(user_input)
+    if not assistant_response:
+        assistant_response = "Sorry, you are not authorized to use this service."
 
     print(f"Assistant response: {assistant_response}")  # Debugging line
     return jsonify({"response": assistant_response})

@@ -19,6 +19,7 @@ def load_configurations(app):
         app.config["IS_USING_DB"] = False
     else:
         app.config["IS_USING_DB"] = True
+    app.config["API_URL"] = os.getenv('API_URL', os.environ.get('API_URL'))
 
 
 def configure_logging():

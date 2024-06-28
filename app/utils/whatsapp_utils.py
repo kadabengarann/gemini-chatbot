@@ -79,6 +79,8 @@ def process_whatsapp_message(body):
 
     # TODO: implement custom function here
     response = generate_response(message_body)
+    if not response:
+        return False
 
     # OpenAI Integration
     # response = generate_response(message_body, wa_id, name)
