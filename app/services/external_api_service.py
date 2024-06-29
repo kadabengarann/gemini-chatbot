@@ -1,18 +1,28 @@
 import requests
 import os
 from flask import current_app
-from app.utils.json_utils import (
-    messages_to_dict,
-    messages_from_dict,
-)
+from ..utils.json_utils import messages_to_dict, messages_from_dict
 
-API_URL =  os.environ.get('API_URL')
+# Define a function to get API URL from app context
+def get_api_url():
+    """
+    Retrieves the API_URL from the current Flask application context.
+    """
+    with current_app.app_context():
+        return current_app.config.get('API_URL')
+
+# Initialize API_URL using the function above
+#API_URL = "https://outdev.werkdone.com/VMS_BL/rest/ChatBot"
+
+API_URL = ""
 
 def handle_api_response(response):
     """
     Helper function to handle common error conditions in API responses.
     Returns parsed JSON data if successful, otherwise returns False.
     """
+    global API_URL
+    API_URL = get_api_url()
     if response.status_code == 401:
         return False
 
@@ -27,6 +37,8 @@ def handle_api_response(response):
     return response_data
 
 def authenticate_user(identifier):
+    global API_URL
+    API_URL = get_api_url()
     """
     Authenticates the user based on the provided identifier.
     Returns conversation history as a list of dicts if authentication is successful, otherwise returns False.
@@ -42,6 +54,8 @@ def authenticate_user(identifier):
     return conversation_history
 
 def store_chat_history(chat_data, identifier):
+    global API_URL
+    API_URL = get_api_url()
     """
     Stores chat history for the user identified by `identifier`.
     Returns True if storing was successful, otherwise returns False.

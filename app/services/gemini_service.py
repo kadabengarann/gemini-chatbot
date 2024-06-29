@@ -1,7 +1,6 @@
 import warnings
 import os
-import app.services.prompt as prompt
-import app.services.external_api_service as api_service
+from ..services import external_api_service as api_service, prompt
 from dotenv import load_dotenv
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain

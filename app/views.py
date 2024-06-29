@@ -9,8 +9,10 @@ from .utils.whatsapp_utils import (
     is_valid_whatsapp_message,
 )
 
-from app.services import gemini_service 
-from app.services.gemini_service  import generate_response
+from .services import gemini_service 
+from .services.gemini_service  import generate_response
+from .services import external_api_service as api_service
+import os
 
 webhook_blueprint = Blueprint("webhook", __name__)
 
@@ -117,7 +119,7 @@ def chat():
 def testing():
     user_input = "give me one of the user's name"
 
-    assistant_response = generate_response(user_input)
+    assistant_response = generate_response(user_input, "temp-Id")
 
     print(f"Assistant response: {assistant_response}")  # Debugging line
     return jsonify({"response": assistant_response,
