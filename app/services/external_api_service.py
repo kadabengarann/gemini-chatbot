@@ -62,7 +62,11 @@ def store_chat_history(chat_data, identifier):
     """
     conversation_history = messages_from_dict(chat_data)
     url = f'{API_URL}/store_chat'
-    payload = conversation_history
+    payload = {
+        "Identifier": identifier,
+        "ChatbotLogList": conversation_history
+    }
+
     headers = {'Content-Type': 'application/json'}
 
     response = requests.post(url, json=payload, headers=headers)
