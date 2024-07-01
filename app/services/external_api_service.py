@@ -24,15 +24,15 @@ def handle_api_response(response):
     global API_URL
     API_URL = get_api_url()
     if response.status_code == 401:
-        return False
+        return None
 
     try:
         response_data = response.json()
     except ValueError:
-        return False
+        return None
 
     if not response_data.get('Result', {}).get('IsSuccess', False):
-        return False
+        return None
 
     return response_data
 
@@ -47,8 +47,8 @@ def authenticate_user(identifier):
     response = requests.get(url)
 
     response_data = handle_api_response(response)
-    if not response_data:
-        return False
+    if response_data is None:
+        return None
 
     conversation_history = messages_to_dict(response_data.get('ConversationHistory', []))
     return conversation_history
@@ -72,8 +72,8 @@ def store_chat_history(chat_data, identifier):
     response = requests.post(url, json=payload, headers=headers)
 
     response_data = handle_api_response(response)
-    if not response_data:
-        return False
+    if response_data is None:
+        return None
 
     return True
 

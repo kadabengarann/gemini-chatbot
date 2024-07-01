@@ -76,8 +76,9 @@ def store_chat_history(chat_data, identifier):
 def generate_response(response, identifier):
     print("---------------User Identifier :" + identifier)
     is_authenticated_result = authenticate_user(identifier)
-    if not is_authenticated_result:
+    if is_authenticated_result is None:
         return False
+        
     extracted_messages = is_authenticated_result
     conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
         ,memory_key='history',k=2)
