@@ -74,6 +74,7 @@ def store_chat_history(chat_data, identifier):
     return result
     
 def generate_response(response, identifier):
+    print("---------------User Identifier :" + identifier)
     is_authenticated_result = authenticate_user(identifier)
     if not is_authenticated_result:
         return False
