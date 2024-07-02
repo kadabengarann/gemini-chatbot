@@ -26,7 +26,6 @@ def messages_to_dict(serialized_messages):
         # Attach additional attributes to the message object
         msg.id = serialized_msg['Id']
         msg.created_datetime = serialized_msg['CreatedDateTime']
-        if serialized_msg['Platform'] is not None:
-            msg.platform = serialized_msg['Platform']
+        msg.platform = serialized_msg.get('Platform')
         messages.append(msg)
     return messages
