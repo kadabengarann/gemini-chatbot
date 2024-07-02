@@ -20,6 +20,10 @@ def load_configurations(app):
     else:
         app.config["IS_USING_DB"] = True
     app.config["API_URL"] = os.getenv('API_URL', os.environ.get('API_URL'))
+    os.environ['LANGCHAIN_TRACING_V2']="true"
+    os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
+    os.environ['LANGCHAIN_API_KEY']= os.getenv('LANGCHAIN_API_KEY', os.environ.get('LANGCHAIN_API_KEY', ''))
+    os.environ['LANGCHAIN_PROJECT']="wd-chatbot"
 
 
 def configure_logging():
