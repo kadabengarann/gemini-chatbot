@@ -10,6 +10,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.agents import AgentType, create_sql_agent
 from langchain.chains.conversation.memory import ConversationEntityMemory
+from langchain.memory import ConversationSummaryBufferMemory
 from langchain.memory import ChatMessageHistory
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -80,8 +81,10 @@ def generate_response(response, identifier):
         return False
         
     extracted_messages = is_authenticated_result
-    conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
-        ,memory_key='history',k=2)
+    # conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
+    #     ,memory_key='history',k=2)
+    conversational_memory = ConversationSummaryBufferMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
+        , max_token_limit=50)
     
     global prompt
     if IS_USING_DB:
