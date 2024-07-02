@@ -10,7 +10,7 @@ def messages_from_dict(messages):
             'Sender': 'human' if isinstance(msg, HumanMessage) else 'AI',
             'Content': msg.content,
             'CreatedDateTime': getattr(msg, 'created_datetime', None),
-            'Platform': getattr(msg, 'platform', None)
+            'Platform': getattr(msg, 'platform', None) if hasattr(msg, 'platform') else None
         }
         serialized_messages.append(serialized_msg)
     return serialized_messages
@@ -26,6 +26,7 @@ def messages_to_dict(serialized_messages):
         # Attach additional attributes to the message object
         msg.id = serialized_msg['Id']
         msg.created_datetime = serialized_msg['CreatedDateTime']
-        msg.platform = serialized_msg['Platform']
+        if serialized_msg['Platform'] is not None:
+            msg.platform = serialized_msg['Platform']
         messages.append(msg)
     return messages
