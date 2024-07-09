@@ -91,7 +91,7 @@ def generate_response(response, identifier):
     if IS_USING_DB:
         agent = create_sql_agent(llm=model, 
              toolkit=datasource.get_toolkit(model), 
-             agent_type="openai-tools",
+             agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
              prompt=prompt, 
              input_variables=["input", "agent_scratchpad", "history"],
              agent_executor_kwargs={'memory': conversational_memory},
