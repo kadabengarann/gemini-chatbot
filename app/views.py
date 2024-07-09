@@ -9,8 +9,8 @@ from .utils.whatsapp_utils import (
     is_valid_whatsapp_message,
 )
 
-from .services import gemini_service 
-from .services.gemini_service  import generate_response
+# from .services.gemini_service  import generate_response
+from .services.gpt_service  import generate_response
 from .services import external_api_service as api_service
 import os
 
@@ -120,7 +120,7 @@ def chat():
 def testing():
     user_input = "give me one of the user's name"
 
-    assistant_response = generate_response(user_input, "temp-Id")
+    assistant_response = generate_response(user_input, "slec4789")
 
     print(f"Assistant response: {assistant_response}")  # Debugging line
     return jsonify({"response": assistant_response,

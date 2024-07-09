@@ -6,6 +6,7 @@ import logging
 
 def load_configurations(app):
     load_dotenv()
+    app.config["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY', os.environ.get('OPENAI_API_KEY'))
     app.config["ACCESS_TOKEN"] = os.getenv('ACCESS_TOKEN', os.environ.get('ACCESS_TOKEN'))
     app.config["APP_ID"] = os.getenv('APP_ID', os.environ.get('APP_ID'))
     app.config["APP_SECRET"] = os.getenv('APP_SECRET', os.environ.get('APP_SECRET'))

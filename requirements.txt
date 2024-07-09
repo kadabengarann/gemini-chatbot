@@ -3,6 +3,7 @@ wheel
 gunicorn
 python-dotenv
 openai
+langchain-openai
 aiohttp
 requests
 langchain 
