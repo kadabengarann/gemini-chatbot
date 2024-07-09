@@ -95,6 +95,7 @@ def generate_response(response, identifier):
              prompt=prompt, 
              input_variables=["input", "agent_scratchpad", "history"],
              agent_executor_kwargs={'memory': conversational_memory},
+             handle_parsing_errors=True,
              verbose=True)
 
     global stuff_chain
