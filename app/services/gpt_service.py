@@ -55,7 +55,7 @@ template = "\n\n".join(
 
 if IS_USING_DB:
     prompt = PromptTemplate.from_template(template)
-    agent = create_sql_agent(llm=model, toolkit=datasource.get_toolkit(model), agent_type="openai-tools", prompt=prompt, verbose=True, handle_parsing_errors=True, early_stopping_method="force", max_iterations=12)
+    agent = create_sql_agent(llm=model, toolkit=datasource.get_toolkit(model), agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, prompt=prompt, verbose=True, handle_parsing_errors=True, early_stopping_method="force", max_iterations=12)
 else:
     prompts = PromptTemplate(
         template=prompt.ALL_PROMPT, input_variables=["context", "question"]
@@ -78,6 +78,8 @@ def generate_response(response, identifier):
     is_authenticated_result = authenticate_user(identifier)
     if is_authenticated_result is None:
         return False
+
+    agent = None
 
     extracted_messages = is_authenticated_result
     # conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
