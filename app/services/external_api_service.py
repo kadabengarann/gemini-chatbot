@@ -1,5 +1,4 @@
 import requests
-import os
 from flask import current_app
 from ..utils.json_utils import messages_to_dict, messages_from_dict
 
@@ -10,9 +9,6 @@ def get_api_url():
     """
     with current_app.app_context():
         return current_app.config.get('API_URL')
-
-# Initialize API_URL using the function above
-#API_URL = "https://outdev.werkdone.com/VMS_BL/rest/ChatBot"
 
 API_URL = ""
 
