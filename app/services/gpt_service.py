@@ -1,114 +1,116 @@
 import warnings
-import os
+from flask import current_app
 from ..services import external_api_service as api_service, prompt
-from dotenv import load_dotenv
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
-from langchain.llms import OpenAI
 from langchain_openai import ChatOpenAI
-
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.agents import AgentType, create_sql_agent
-from langchain.chains.conversation.memory import ConversationEntityMemory
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.memory import ChatMessageHistory
+from langchain.chains.conversation.memory import ConversationEntityMemory
+from langchain.chains import Chroma
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-# Configuration
-load_dotenv()
-IS_USING_DB = os.environ.get('IS_USING_DB')
-if IS_USING_DB == 'False':
-    IS_USING_DB = False
-else:
-    IS_USING_DB = True
-
-print(f'Is Using SB {type(IS_USING_DB)} {IS_USING_DB}')
-
-if IS_USING_DB:
-    # Import modules or execute code for when IS_USING_DB is True
-    from app.datasource import db_datasource as datasource
-else:
-    from app.datasource import remote_datasource as datasource
-
-model_name = os.environ.get('MODEL_NAME')
+# Global variables
+_model = None
+_datasource = None
 agent = None
 stuff_chain = None
+vector_index = None
+IS_USING_DB = None
 
-# Initialization
-model = ChatOpenAI(model_name=model_name, temperature=0.3)
-if not IS_USING_DB:
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
-    context = str(datasource.data_context)
-    texts = text_splitter.split_text(context)
-    # vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
+def get_datasource():
+    """Return the appropriate datasource based on the current configuration."""
+    global _datasource, IS_USING_DB
+    if _datasource is None:
+        IS_USING_DB = current_app.config['IS_USING_DB']
+        if IS_USING_DB:
+            from app.datasource import db_datasource as datasource
+        else:
+            from app.datasource import remote_datasource as datasource
+        _datasource = datasource
+    return _datasource
 
-#Promt for SQL based
-template = "\n\n".join(
-    [
-        prompt.PREFIX, 
-        "{tools}",
-        prompt.FORMAT_INSTRUCTIONS,
-        prompt.SUFFIX,
-    ]
-)
+def initialize_model():
+    """Initialize and return the ChatOpenAI model."""
+    global _model
+    if _model is None:
+        model_name = current_app.config.get('MODEL_NAME')
+        if not model_name:
+            raise ValueError("MODEL_NAME environment variable not set")
+        _model = ChatOpenAI(model_name=model_name, temperature=0.3)
+    return _model
 
-if IS_USING_DB:
-    prompt = PromptTemplate.from_template(template)
-    agent = create_sql_agent(llm=model, toolkit=datasource.get_toolkit(model), agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, prompt=prompt, verbose=True, handle_parsing_errors=True, early_stopping_method="force", max_iterations=12)
-else:
-    prompts = PromptTemplate(
-        template=prompt.ALL_PROMPT, input_variables=["context", "question"]
+def initialize_sql_agent(model, datasource, conversational_memory):  
+    """Initialize and return the SQL agent."""
+    template = "\n\n".join([prompt.PREFIX, "{tools}", prompt.FORMAT_INSTRUCTIONS, prompt.SUFFIX])
+    sql_prompt = PromptTemplate.from_template(template)
+    return create_sql_agent(
+        llm=model,
+        toolkit=datasource.get_toolkit(model),
+        agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        prompt=sql_prompt,
+        input_variables=["input", "agent_scratchpad", "history"],
+        agent_executor_kwargs={'memory': conversational_memory},
+        handle_parsing_errors=True,
+        verbose=True
     )
-    stuff_chain = load_qa_chain(model, chain_type="stuff", prompt=prompts)
 
+def initialize_stuff_chain(model):
+    """Initialize and return the 'stuff' chain for non-DB cases."""
+    prompts = PromptTemplate(template=prompt.ALL_PROMPT, input_variables=["context", "question"])
+    return load_qa_chain(model, chain_type="stuff", prompt=prompts)
 
-# Functions
 def authenticate_user(identifier):
+    """Authenticate the user based on the identifier."""
     result = api_service.authenticate_user(identifier)
-    if result is False:
-        return False
-    return result
+    return result if result else False
+
 def store_chat_history(chat_data, identifier):
-    result = api_service.store_chat_history(chat_data, identifier)
-    return result
+    """Store chat history for the user."""
+    return api_service.store_chat_history(chat_data, identifier)
 
 def generate_response(response, identifier):
-    print("---------------User Identifier :" + identifier)
+    """Generate a response based on the user input and identifier."""
+    print(f"---------------User Identifier : {identifier}")
     is_authenticated_result = authenticate_user(identifier)
-    if is_authenticated_result is None:
+    if not is_authenticated_result:
         return False
 
-    agent = None
+    global agent, stuff_chain, vector_index
+
+    datasource = get_datasource()
+    model = initialize_model()
 
     extracted_messages = is_authenticated_result
     # conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
     #     ,memory_key='history',k=2)
-    conversational_memory = ConversationSummaryBufferMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
-        , max_token_limit=50)
-
-    global prompt
-    if IS_USING_DB:
-        agent = create_sql_agent(llm=model, 
-             toolkit=datasource.get_toolkit(model), 
-             agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-             prompt=prompt, 
-             input_variables=["input", "agent_scratchpad", "history"],
-             agent_executor_kwargs={'memory': conversational_memory},
-             handle_parsing_errors=True,
-             verbose=True)
-
-    global stuff_chain
-    if agent is None and IS_USING_DB:
-        return "Agent not initialized"
-    if stuff_chain is None and not IS_USING_DB:
-        return "Stuff chain not initialized"
+    conversational_memory = ConversationSummaryBufferMemory(
+        chat_memory=ChatMessageHistory(messages=extracted_messages),
+        llm=model,
+        max_token_limit=50
+    )
 
     if IS_USING_DB:
-        answer = agent.run(response)
-        assistant_response = answer
+        if agent is None:
+            agent = initialize_sql_agent(model, datasource, conversational_memory)
+        if agent is None:
+            return "Agent not initialized"
+        assistant_response = agent.run(response)
         store_chat_history(agent.memory.chat_memory.messages, identifier)
     else:
+        if stuff_chain is None:
+            stuff_chain = initialize_stuff_chain(model)
+        if stuff_chain is None:
+            return "Stuff chain not initialized"
+        if vector_index is None:
+            context = str(datasource.data_context)
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
+            texts = text_splitter.split_text(context)
+            # Initialize the vector index (assuming `embeddings` is defined and properly set up)
+            vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
         docs = vector_index.get_relevant_documents(response)
         stuff_answer = stuff_chain({"input_documents": docs, "question": response}, return_only_outputs=False)
         assistant_response = stuff_answer['output_text']

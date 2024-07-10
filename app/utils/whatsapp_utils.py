@@ -2,10 +2,7 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
-# from ..services.gemini_service  import generate_response
-from ..services.gpt_service  import generate_response
-
-# from app.services.openai_service import generate_response
+from ..services.model_service  import generate_response
 
 import re
 

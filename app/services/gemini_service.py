@@ -42,7 +42,7 @@ if not IS_USING_DB:
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
     context = str(datasource.data_context)
     texts = text_splitter.split_text(context)
-    # vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
+    vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
 
 #Promt for SQL based
 template = "\n\n".join(
@@ -56,7 +56,6 @@ template = "\n\n".join(
 
 if IS_USING_DB:
     prompt = PromptTemplate.from_template(template)
-    agent = create_sql_agent(llm=model, toolkit=datasource.get_toolkit(model),    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION, prompt=prompt, verbose=True, handle_parsing_errors=True, early_stopping_method="force", max_iterations=12)
 else:
     prompts = PromptTemplate(
         template=prompt.ALL_PROMPT, input_variables=["context", "question"]
@@ -79,14 +78,17 @@ def generate_response(response, identifier):
     is_authenticated_result = authenticate_user(identifier)
     if is_authenticated_result is None:
         return False
-        
+
+    global agent
+    global prompt
+    global stuff_chain
+    
     extracted_messages = is_authenticated_result
     # conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
     #     ,memory_key='history',k=2)
     conversational_memory = ConversationSummaryBufferMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
         , max_token_limit=50)
     
-    global prompt
     if IS_USING_DB:
         agent = create_sql_agent(llm=model, 
              toolkit=datasource.get_toolkit(model), 
@@ -95,8 +97,6 @@ def generate_response(response, identifier):
              input_variables=["input", "agent_scratchpad", "history"],
              agent_executor_kwargs={'memory': conversational_memory},
              verbose=True)
-
-    global stuff_chain
     if agent is None and IS_USING_DB:
         return "Agent not initialized"
     if stuff_chain is None and not IS_USING_DB:
