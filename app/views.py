@@ -1,5 +1,7 @@
 import logging
 import json
+import time
+from threading import Thread
 
 from flask import Blueprint, request, jsonify, current_app
 from .decorators.security import signature_required
@@ -11,6 +13,10 @@ from .services.model_service  import generate_response
 
 webhook_blueprint = Blueprint("webhook", __name__)
 
+def is_timestamp_within_1_minutes(timestamp):
+    current_time = int(time.time())
+    limin_minutes = current_time - 60  # 120 seconds = 2 minutes
+    return timestamp > limin_minutes
 
 def handle_message():
     """
@@ -27,9 +33,8 @@ def handle_message():
         response: A tuple containing a JSON response and an HTTP status code.
     """
     body = request.get_json()
-    # logging.info(f"request body: {body}")
-
-    print(f"request body: {body}")
+    app_context = current_app.app_context()
+    
     # Check if it's a WhatsApp status update
     if (
         body.get("entry", [{}])[0]
@@ -42,10 +47,26 @@ def handle_message():
 
     try:
         if is_valid_whatsapp_message(body):
-            process_whatsapp_message(body)
+            logging.info(f"Processing message: {body}")
+            try:
+                message_timestamp = int(body["entry"][0]["changes"][0]["value"]["messages"][0]["timestamp"])
+                if is_timestamp_within_1_minutes(message_timestamp) is False:
+                    logging.info("------------------------------------------------------------------------------------Message is too old------------------------------------------------------------------------------------")
+                    return jsonify({"status": "ok"}), 200
+                # Process the message in a new thread
+                thread = Thread(target=process_whatsapp_message, args=(body,app_context))
+                thread.start()
+            except Exception as e:
+                logging.error(f"Error processing WhatsApp message: {e}")
+                return (
+                    jsonify({"status": "error", "message": "Failed to process WhatsApp message"}),
+                    500,
+                )
+            logging.info("Response status: OK 200")
             return jsonify({"status": "ok"}), 200
         else:
             # if the request is not a WhatsApp API event, return an error
+            logging.warning("Received a non-WhatsApp API event.")
             return (
                 jsonify({"status": "error", "message": "Not a WhatsApp API event"}),
                 404,

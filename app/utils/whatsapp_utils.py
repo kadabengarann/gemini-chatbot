@@ -68,24 +68,30 @@ def process_text_for_whatsapp(text):
     return whatsapp_style_text
 
 
-def process_whatsapp_message(body):
-    wa_id = body["entry"][0]["changes"][0]["value"]["contacts"][0]["wa_id"]
-    name = body["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
+def process_whatsapp_message(body, app_context):
+    with app_context:
+        try:
+            wa_id = body["entry"][0]["changes"][0]["value"]["contacts"][0]["wa_id"]
+            name = body["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
+        
+            message = body["entry"][0]["changes"][0]["value"]["messages"][0]
+            message_body = message["text"]["body"]
+        
+            print(f"------------------------ Message Processed -----------------------:\n{message_body}")
+            # TODO: implement custom function here
+            response = generate_response(message_body, wa_id)
+            if not response:
+                return False
 
-    message = body["entry"][0]["changes"][0]["value"]["messages"][0]
-    message_body = message["text"]["body"]
+            response = process_text_for_whatsapp(response)
+        
+            data = get_text_message_input(wa_id, response)
+            send_message(data)
+            return True
+        except Exception as e:
+            logging.error(f"Error processing WhatsApp message: {e}")
+            return False
 
-    # TODO: implement custom function here
-    response = generate_response(message_body, wa_id)
-    if not response:
-        return False
-
-    # OpenAI Integration
-    # response = generate_response(message_body, wa_id, name)
-    response = process_text_for_whatsapp(response)
-
-    data = get_text_message_input(wa_id, response)
-    send_message(data)
 
 
 def is_valid_whatsapp_message(body):

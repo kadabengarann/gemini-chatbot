@@ -17,7 +17,7 @@ Relevant pieces of previous conversation:
 Question: {input}
 Thought:{agent_scratchpad}"""
 
-ALL_PROMPT = """You are a assistant for a system to answering users question. Answer the question using the context data and answer it in professional way. If answer include a date format it should be in the format including day of the week that easily undestandable.
+ALL_PROMPT = """You are a assistant for a system to answering users question. Answer the question using the context data and answer it in professional way. If answer include a date format it should be in the format including day of the week that easily undestandable. Do not answer outside of context
 
 Context: 
 {context}
