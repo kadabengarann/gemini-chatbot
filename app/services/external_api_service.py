@@ -44,8 +44,7 @@ def authenticate_user(identifier):
 
     response_data = handle_api_response(response)
     if response_data is None:
-        conversation_history = messages_to_dict([])
-        return conversation_history
+        return False
 
     conversation_history = messages_to_dict(response_data.get('ConversationHistory', []))
     return conversation_history

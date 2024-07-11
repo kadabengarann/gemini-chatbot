@@ -74,10 +74,12 @@ def store_chat_history(chat_data, identifier):
     return result
     
 def generate_response(response, identifier):
-    print("---------------User Identifier :" + identifier)
+    print(f"---------------User Identifier : {identifier}")
     is_authenticated_result = authenticate_user(identifier)
-    if is_authenticated_result is None:
+    if is_authenticated_result is False:
+        print(f"---------------Unauthorized User : {identifier} {is_authenticated_result}")
         return False
+    print(f"---------------Authorized User : {identifier}")
 
     global agent
     global prompt
@@ -105,6 +107,7 @@ def generate_response(response, identifier):
     if IS_USING_DB:
         answer = agent.run(response)
         assistant_response = answer
+
         store_chat_history(agent.memory.chat_memory.messages, identifier)
     else:
         docs = vector_index.get_relevant_documents(response)

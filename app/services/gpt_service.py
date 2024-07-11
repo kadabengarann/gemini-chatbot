@@ -76,9 +76,10 @@ def generate_response(response, identifier):
     """Generate a response based on the user input and identifier."""
     print(f"---------------User Identifier : {identifier}")
     is_authenticated_result = authenticate_user(identifier)
-    if not is_authenticated_result:
+    if is_authenticated_result is False:
+        print(f"---------------Unauthorized User : {identifier} {is_authenticated_result}")
         return False
-
+    print(f"---------------Authorized User : {identifier}")
     global agent, stuff_chain, vector_index
 
     datasource = get_datasource()
