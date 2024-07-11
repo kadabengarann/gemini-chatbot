@@ -107,7 +107,7 @@ def generate_response(response, identifier):
         if agent is None:
             return "Agent not initialized"
         # assistant_response = agent.run(response)
-        assistant_response = agent.run({"input": response, "user_name": username, "current_date": current_date, "current_day": current_day})
+        assistant_response = agent({"input": response, "user_name": username, "current_date": current_date, "current_day": current_day})
 
         store_chat_history(agent.memory.chat_memory.messages, identifier)
     else:
