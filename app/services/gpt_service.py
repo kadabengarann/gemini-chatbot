@@ -57,7 +57,8 @@ def initialize_sql_agent(model, datasource, conversational_memory, user_name):
         toolkit=datasource.get_toolkit(model),
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         prompt=sql_prompt,
-        input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"],
+        # input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"],
+        input_variables=["input", "agent_scratchpad", "history"],
         agent_executor_kwargs={'memory': conversational_memory},
         handle_parsing_errors=True,
         verbose=True
