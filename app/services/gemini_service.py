@@ -52,10 +52,7 @@ def initialize_sql_agent(model, datasource, conversational_memory, user_name):
     current_day = datetime.now().strftime("%A")
 
     template = "\n\n".join([prompt.PREFIX, "{tools}", prompt.FORMAT_INSTRUCTIONS, prompt.SUFFIX])
-    sql_prompt = PromptTemplate.from_template(
-        template,
-        input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"]
-    )
+    sql_prompt = PromptTemplate.from_template(template)
     return create_sql_agent(
         llm=model,
         toolkit=datasource.get_toolkit(model),
