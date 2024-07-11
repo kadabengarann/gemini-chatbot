@@ -46,8 +46,9 @@ def authenticate_user(identifier):
     if response_data is None:
         return False
 
+    username = response_data.get('UserName', '')
     conversation_history = messages_to_dict(response_data.get('ConversationHistory', []))
-    return conversation_history
+    return username, conversation_history
 
 def store_chat_history(chat_data, identifier):
     global API_URL

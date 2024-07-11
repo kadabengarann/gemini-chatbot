@@ -1,4 +1,5 @@
 import warnings
+from datetime import datetime
 from flask import current_app
 from ..services import external_api_service as api_service, prompt
 from langchain import PromptTemplate
@@ -43,16 +44,23 @@ def initialize_model():
         _model = ChatOpenAI(model_name=model_name, temperature=0.3)
     return _model
 
-def initialize_sql_agent(model, datasource, conversational_memory):  
+def initialize_sql_agent(model, datasource, conversational_memory, user_name): 
     """Initialize and return the SQL agent."""
+    # Get the current date and day
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    current_day = datetime.now().strftime("%A")
+    
     template = "\n\n".join([prompt.PREFIX, "{tools}", prompt.FORMAT_INSTRUCTIONS, prompt.SUFFIX])
-    sql_prompt = PromptTemplate.from_template(template)
+    sql_prompt = PromptTemplate.from_template(
+        template,
+        input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"]
+    )
     return create_sql_agent(
         llm=model,
         toolkit=datasource.get_toolkit(model),
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         prompt=sql_prompt,
-        input_variables=["input", "agent_scratchpad", "history"],
+        input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"],
         agent_executor_kwargs={'memory': conversational_memory},
         handle_parsing_errors=True,
         verbose=True
@@ -75,17 +83,17 @@ def store_chat_history(chat_data, identifier):
 def generate_response(response, identifier):
     """Generate a response based on the user input and identifier."""
     print(f"---------------User Identifier : {identifier}")
-    is_authenticated_result = authenticate_user(identifier)
-    if is_authenticated_result is False:
-        print(f"---------------Unauthorized User : {identifier} {is_authenticated_result}")
+    authentication_result = authenticate_user(identifier)
+    if authentication_result is False:
+        print(f"---------------Unauthorized User : {identifier} {authentication_result}")
         return False
     print(f"---------------Authorized User : {identifier}")
+    username, extracted_messages = authentication_result
     global agent, stuff_chain, vector_index
 
     datasource = get_datasource()
     model = initialize_model()
-
-    extracted_messages = is_authenticated_result
+    
     # conversational_memory = ConversationEntityMemory(chat_memory=ChatMessageHistory(messages=extracted_messages),llm=model
     #     ,memory_key='history',k=2)
     conversational_memory = ConversationSummaryBufferMemory(
@@ -96,7 +104,7 @@ def generate_response(response, identifier):
 
     if IS_USING_DB:
         if agent is None:
-            agent = initialize_sql_agent(model, datasource, conversational_memory)
+            agent = initialize_sql_agent(model, datasource, conversational_memory, username)
         if agent is None:
             return "Agent not initialized"
         assistant_response = agent.run(response)
