@@ -47,9 +47,6 @@ def initialize_model():
 
 def initialize_sql_agent(model, datasource, conversational_memory, user_name): 
     """Initialize and return the SQL agent."""
-    # Get the current date and day
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    current_day = datetime.now().strftime("%A")
 
     template = "\n\n".join([prompt.PREFIX, "{tools}", prompt.FORMAT_INSTRUCTIONS, prompt.SUFFIX])
     sql_prompt = PromptTemplate.from_template(template)
@@ -80,6 +77,9 @@ def store_chat_history(chat_data, identifier):
 
 def generate_response(response, identifier):
     """Generate a response based on the user input and identifier."""
+    # Get the current date and day
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    current_day = datetime.now().strftime("%A")
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     print(f"---------------User Identifier : {identifier}")
     authentication_result = authenticate_user(identifier)
@@ -106,7 +106,9 @@ def generate_response(response, identifier):
             agent = initialize_sql_agent(model, datasource, conversational_memory, username)
         if agent is None:
             return "Agent not initialized"
-        assistant_response = agent.run(response)
+        # assistant_response = agent.run(response)
+        assistant_response = agent.run({"input": response, "user_name": username, "current_date": current_date, "current_day": current_day})
+
         store_chat_history(agent.memory.chat_memory.messages, identifier)
     else:
         if stuff_chain is None:
