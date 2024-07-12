@@ -3,6 +3,7 @@ from flask import current_app, jsonify
 import json
 import requests
 from ..services.model_service  import generate_response
+from ..utils.static import MessageType
 
 import re
 
@@ -79,7 +80,7 @@ def process_whatsapp_message(body, app_context):
         
             print(f"------------------------ Message Processed -----------------------:\n{message_body}")
             # TODO: implement custom function here
-            response = generate_response(message_body, wa_id)
+            response = generate_response(message_body, wa_id, MessageType.WHATSAPP)
             if not response:
                 return False
 

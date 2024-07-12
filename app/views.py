@@ -10,6 +10,7 @@ from .utils.whatsapp_utils import (
     is_valid_whatsapp_message,
 )
 from .services.model_service  import generate_response
+from .utils.static import MessageType
 
 webhook_blueprint = Blueprint("webhook", __name__)
 
@@ -125,7 +126,7 @@ def chat():
     user_input = data.get('message', '')
     user_code = data.get('code', '')
 
-    assistant_response = generate_response(user_input, user_code)
+    assistant_response = generate_response(user_input, user_code, MessageType.WEB_CHAT)
     if not assistant_response:
         assistant_response = "Sorry, you are not authorized to use this service."
 

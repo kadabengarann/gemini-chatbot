@@ -1,4 +1,5 @@
 import warnings
+import logging
 from datetime import datetime
 from flask import current_app
 from ..services import external_api_service as api_service, prompt
@@ -46,9 +47,6 @@ def initialize_model():
 
 def initialize_sql_agent(model, datasource, conversational_memory, user_name): 
     """Initialize and return the SQL agent."""
-    # Get the current date and day
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    current_day = datetime.now().strftime("%A")
     
     template = "\n\n".join([prompt.PREFIX, "{tools}", prompt.FORMAT_INSTRUCTIONS, prompt.SUFFIX])
     sql_prompt = PromptTemplate.from_template(template)
@@ -68,26 +66,27 @@ def initialize_stuff_chain(model):
     prompts = PromptTemplate(template=prompt.ALL_PROMPT, input_variables=["context", "question"])
     return load_qa_chain(model, chain_type="stuff", prompt=prompts)
 
-def authenticate_user(identifier):
+def authenticate_user(identifier, message_type):
     """Authenticate the user based on the identifier."""
-    result = api_service.authenticate_user(identifier)
+    result = api_service.authenticate_user(identifier, message_type)
     return result if result else False
 
-def store_chat_history(chat_data, identifier):
+def store_chat_history(chat_data, identifier, message_type):
     """Store chat history for the user."""
-    return api_service.store_chat_history(chat_data, identifier)
+    return api_service.store_chat_history(chat_data, identifier, message_type)
 
-def generate_response(response, identifier):
+def generate_response(response, identifier, message_type=""):
     """Generate a response based on the user input and identifier."""
+    logging.info(f"------- Processing Question From {message_type}")
     # Get the current date and day
     current_date = datetime.now().strftime("%Y-%m-%d")
     current_day = datetime.now().strftime("%A")
-    print(f"---------------User Identifier : {identifier}")
-    authentication_result = authenticate_user(identifier)
+    logging.info(f"        User Identifier : {identifier}")
+    authentication_result = authenticate_user(identifier, message_type)
     if authentication_result is False:
-        print(f"---------------Unauthorized User : {identifier} {authentication_result}")
+        logging.info(f"        Unauthorized User : {identifier} {authentication_result}")
         return False
-    print(f"---------------Authorized User : {identifier}")
+    logging.info(f"        Authorized User : {identifier}")
     username, extracted_messages = authentication_result
     global agent, stuff_chain, vector_index
 
@@ -115,7 +114,7 @@ def generate_response(response, identifier):
             "current_day": current_day
         }
         assistant_response = agent.run(input_dict)
-        store_chat_history(agent.memory.chat_memory.messages, identifier)
+        store_chat_history(agent.memory.chat_memory.messages, identifier, message_type)
     else:
         if stuff_chain is None:
             stuff_chain = initialize_stuff_chain(model)
@@ -134,5 +133,5 @@ def generate_response(response, identifier):
     if "does not mention" in assistant_response:
         assistant_response = "Answer not available in context"
 
-    print(f"Assistant response: {assistant_response}")  # Debugging line
+    logging.info(f"        Assistant response: {assistant_response}") # Debugging line
     return assistant_response

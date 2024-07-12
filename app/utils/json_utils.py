@@ -1,7 +1,7 @@
 from langchain.schema import HumanMessage, AIMessage
 
 # Utility functions (assuming they're already defined)
-def messages_from_dict(messages):
+def messages_from_dict(messages, message_type = ""):
     serialized_messages = []
     for msg in messages:
         serialized_msg = {
@@ -9,7 +9,7 @@ def messages_from_dict(messages):
             'Sender': 'human' if isinstance(msg, HumanMessage) else 'AI',
             'Content': msg.content,
             'CreatedDateTime': getattr(msg, 'created_datetime', None),
-            'Platform': getattr(msg, 'platform', None) if hasattr(msg, 'platform') else None
+            'Platform': getattr(msg, 'platform', message_type) or message_type
         }
         serialized_messages.append(serialized_msg)
     return serialized_messages
