@@ -134,7 +134,7 @@ def chat():
 
 @webhook_blueprint.route('/testing', methods=['GET'])
 def testing():
-    user_input = "give me one of the user's name"
+    user_input = "what is my name and what day is next 2 days"
 
     assistant_response = generate_response(user_input, "slec4789")
 

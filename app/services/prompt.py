@@ -8,10 +8,10 @@ Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
-Final Answer: the final answer to the original input question and tell it as professional customer service style and prevent showing any sensitive data"""
+Final Answer: the final answer to the original input question and tell it as professional customer service style and prevent showing any sensitive data, if contain date data please answer it in DayName, DD MMM YYYY format"""
 SUFFIX = """Begin!
 Current User data:
-User Name: {user_name}
+Current Asker Name: {user_name}
 Current Date: {current_date}
 Current Day: {current_day}
 

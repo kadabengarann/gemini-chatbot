@@ -57,8 +57,7 @@ def initialize_sql_agent(model, datasource, conversational_memory, user_name):
         toolkit=datasource.get_toolkit(model),
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         prompt=sql_prompt,
-        # input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"],
-        input_variables=["input", "agent_scratchpad", "history"],
+        input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"],
         agent_executor_kwargs={'memory': conversational_memory},
         handle_parsing_errors=True,
         verbose=True
@@ -80,6 +79,9 @@ def store_chat_history(chat_data, identifier):
 
 def generate_response(response, identifier):
     """Generate a response based on the user input and identifier."""
+    # Get the current date and day
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    current_day = datetime.now().strftime("%A")
     print(f"---------------User Identifier : {identifier}")
     authentication_result = authenticate_user(identifier)
     if authentication_result is False:
@@ -97,7 +99,8 @@ def generate_response(response, identifier):
     conversational_memory = ConversationSummaryBufferMemory(
         chat_memory=ChatMessageHistory(messages=extracted_messages),
         llm=model,
-        max_token_limit=50
+        max_token_limit=50,
+        input_key='input'
     )
 
     if IS_USING_DB:
@@ -105,7 +108,13 @@ def generate_response(response, identifier):
             agent = initialize_sql_agent(model, datasource, conversational_memory, username)
         if agent is None:
             return "Agent not initialized"
-        assistant_response = agent.run(response)
+        input_dict = {
+            "input": response,
+            "user_name": username,
+            "current_date": current_date,
+            "current_day": current_day
+        }
+        assistant_response = agent.run(input_dict)
         store_chat_history(agent.memory.chat_memory.messages, identifier)
     else:
         if stuff_chain is None:
