@@ -32,16 +32,21 @@ def handle_api_response(response):
 
     return response_data
 
-def authenticate_user(identifier):
+def authenticate_user(identifier, message_type):
     global API_URL
     API_URL = get_api_url()
     """
     Authenticates the user based on the provided identifier.
     Returns conversation history as a list of dicts if authentication is successful, otherwise returns False.
     """
-    url = f'{API_URL}/auth?Identifier={identifier}'
-    response = requests.get(url)
+    url = f'{API_URL}/auth'
+    payload = {
+        "Identifier": identifier,
+        "MessageType": message_type
+    }
+    headers = {'Content-Type': 'application/json'}
 
+    response = requests.post(url, json=payload, headers=headers)
     response_data = handle_api_response(response)
     if response_data is None:
         return False
@@ -50,14 +55,14 @@ def authenticate_user(identifier):
     conversation_history = messages_to_dict(response_data.get('ConversationHistory', []))
     return username, conversation_history
 
-def store_chat_history(chat_data, identifier):
+def store_chat_history(chat_data, identifier, message_type):
     global API_URL
     API_URL = get_api_url()
     """
     Stores chat history for the user identified by `identifier`.
     Returns True if storing was successful, otherwise returns False.
     """
-    conversation_history = messages_from_dict(chat_data)
+    conversation_history = messages_from_dict(chat_data, message_type)
     url = f'{API_URL}/store_chat'
     payload = {
         "Identifier": identifier,
