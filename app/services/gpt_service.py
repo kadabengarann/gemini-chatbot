@@ -11,7 +11,6 @@ from langchain.agents import AgentType, create_sql_agent
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.memory import ChatMessageHistory
 from langchain.chains.conversation.memory import ConversationEntityMemory
-from langchain.chains import Chroma
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -125,7 +124,6 @@ def generate_response(response, identifier, message_type=""):
             text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=0)
             texts = text_splitter.split_text(context)
             # Initialize the vector index (assuming `embeddings` is defined and properly set up)
-            vector_index = Chroma.from_texts(texts, embeddings).as_retriever()
         docs = vector_index.get_relevant_documents(response)
         stuff_answer = stuff_chain({"input_documents": docs, "question": response}, return_only_outputs=False)
         assistant_response = stuff_answer['output_text']
