@@ -21,7 +21,7 @@ def load_configurations(app):
     os.environ['LANGCHAIN_API_KEY']= os.getenv('LANGCHAIN_API_KEY', os.environ.get('LANGCHAIN_API_KEY', ''))
     os.environ['LANGCHAIN_TRACING_V2']="true"
     os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
-    os.environ['LANGCHAIN_PROJECT']="wd-chatbot"
+    os.environ['LANGCHAIN_PROJECT']=os.getenv('LANGCHAIN_PROJECT', os.environ.get('LANGCHAIN_PROJECT', ''))
 
 def configure_logging():
     logging.basicConfig(
