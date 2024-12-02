@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: VMS_API
+  version: 1.0.0
+  description: |
+    NegaraAPI is VMS API for managing residents. This API allows fetching a list of residents filtered by parameters such as name and ID.
+  termsOfService: https://example.com/terms
+  contact:
+    name: API Support
+    url: https://example.com/support
+    email: support@example.com
+servers:
+  - url: https://personal-tozx01kl.outsystemscloud.com/NegaraAPI/rest/api/v1
+paths:
+  /residents:
+    get:
+      summary: Get Residents
+      description: |
+        This endpoint retrieves:
+        - A **list of residents** when no specific `id` is provided or when filters like `name` are used.
+        - A **single resident's data** (in a list of one item) when the `id` parameter is provided.
+  
+        Example usage:
+        - `/residents` → Returns all residents.
+        - `/residents?name=John` → Filters residents by name.
+        - `/residents?id=1234567891234567` → Returns a list with a single resident matching the ID.
+      operationId: getResidents
+      parameters:
+        - name: name
+          in: query
+          description: Filter residents by name.
+          required: false
+          schema:
+            type: string
+            example: John
+        - name: id
+          in: query
+          description: Filter residents by ID.
+          required: false
+          schema:
+            type: string
+            example: 1234567891234567
+      responses:
+        "200":
+          $ref: "#/components/responses/ResidentListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    ResidentListResponse:
+      description: A list of residents.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  residentlist:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ResidentObject"
+    Unauthorized:
+      description: Unauthorized. Invalid or missing Bearer token.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Unauthorized access."
+    BadRequest:
+      description: Bad Request. Invalid query parameters.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Invalid query parameters."
+  schemas:
+    ResidentObject:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Resident ID.
+          example: 1234567891234567
+        CaseId:
+          type: string
+          description: Case ID of the resident.
+          example: "BAX132421"
+        Name:
+          type: string
+          description: Name of the resident.
+          example: "John Doe"
+        Wing:
+          type: string
+          description: Wing of the resident location.
+          example: "11B"
+        Bed:
+          type: integer
+          description: Bed number of the resident location.
+          example: 12
+        Branch:
+          type: string
+          description: Branch location of the resident.
+          example: "Main Branch"
