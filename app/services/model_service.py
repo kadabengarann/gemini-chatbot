@@ -10,7 +10,10 @@ def generate_response(response, identifier, message_type=""):
     IS_USING_GPT = current_app.config['IS_USING_GPT']
 
     if IS_USING_API:
-      from ..services.gemini_service_api  import generate_response as model_generate_response
+      if IS_USING_GPT:
+        from ..services.gpt_service_api  import generate_response as model_generate_response
+      else:
+        from ..services.gemini_service_api  import generate_response as model_generate_response
     else:
       if IS_USING_GPT:
         from ..services.gpt_service  import generate_response as model_generate_response
