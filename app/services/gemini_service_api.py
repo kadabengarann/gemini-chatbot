@@ -24,6 +24,7 @@ stuff_chain = None
 vector_index = None
 IS_USING_DB = None
 IS_USING_API = None
+_datasource = None
 
 def get_datasource():
     """Return the appropriate datasource based on the current configuration."""
