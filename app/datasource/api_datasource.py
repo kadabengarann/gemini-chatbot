@@ -4,7 +4,7 @@ from langchain_community.tools.json.tool import JsonSpec
 from langchain_community.utilities.requests import RequestsWrapper
 from langchain_community.agent_toolkits import OpenAPIToolkit
 from langchain_community.agent_toolkits.openapi.spec import reduce_openapi_spec
-from custom_openapi_toolkit import CustomOpenAPIToolkit
+from ..toolkit.custom_openapi_toolkit import CustomOpenAPIToolkit
 import os
 import pickle
 
