@@ -4,6 +4,7 @@ from langchain_community.tools.json.tool import JsonSpec
 from langchain_community.utilities.requests import RequestsWrapper
 from langchain_community.agent_toolkits import OpenAPIToolkit
 from langchain_community.agent_toolkits.openapi.spec import reduce_openapi_spec
+from custom_openapi_toolkit import CustomOpenAPIToolkit
 import os
 import pickle
 
@@ -45,10 +46,10 @@ def get_api_toolkit(model):
     headers = construct_vms_api_auth_headers()
     vms_api_requests_wrapper = RequestsWrapper(headers=headers)
 
-    return OpenAPIToolkit.from_llm(
+    return CustomOpenAPIToolkit.from_llm(
         llm=model, 
-        json_spec = api_json_spec, 
-        requests_wrapper = vms_api_requests_wrapper, 
-        allow_dangerous_requests= True,
+        json_spec=api_json_spec, 
+        requests_wrapper=vms_api_requests_wrapper, 
+        allow_dangerous_requests=True,
         verbose=True
     )
