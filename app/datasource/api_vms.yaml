@@ -15,9 +15,11 @@ servers:
 paths:
   /residents:
     get:
-      summary: Get Residents
+      summary: Get Resident Information
       description: Retrieve a list of residents based on query parameters such as name and ID.
-      operationId: getResidents
+      operationId: Resident
+      tags:
+        - VMS_API
       parameters:
         - name: name
           in: query
@@ -25,57 +27,110 @@ paths:
           required: false
           schema:
             type: string
-            example: John
+            example: Figarland
         - name: id
           in: query
           description: Filter residents by ID.
           required: false
           schema:
             type: string
-            example: 1234567891234567
+            example: 695412b0-7c7b-4887-8494-317883816cdb
       responses:
         "200":
-          description: A successful response containing a list of residents.
+          description: A successful response containing resident information.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Error message, if any.
-                    example: ""
-                  data:
-                    type: object
-                    properties:
-                      residentlist:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/ResidentObject"
-        "401":
-          description: Unauthorized access due to missing or invalid Bearer token.
+                $ref: "#/components/schemas/ResidentResponse"
+  /visitors:
+    get:
+      summary: Get Visitor Information
+      description: Retrieve a list of visitors based on query parameters such as name and ID.
+      operationId: Visitor
+      tags:
+        - VMS_API
+      parameters:
+        - name: name
+          in: query
+          description: Filter visitors by name.
+          required: false
+          schema:
+            type: string
+            example: Carol
+        - name: id
+          in: query
+          description: Filter visitors by ID.
+          required: false
+          schema:
+            type: string
+            example: a38d8e04-4d1f-438d-a5d8-76e183178e12
+      responses:
+        "200":
+          description: A successful response containing visitor information.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Error message.
-                    example: "Unauthorized access."
-        "400":
-          description: Bad request due to invalid query parameters.
+                $ref: "#/components/schemas/VisitorResponse"
+  /visitations:
+    get:
+      summary: Get Visitation Information
+      description: Retrieve a list of visitations based on query parameters such as date, visitor ID, and resident ID.
+      operationId: Visitation
+      tags:
+        - VMS_API
+      parameters:
+        - name: date
+          in: query
+          description: Filter visitations by specific date.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2024-10-08
+        - name: startDate
+          in: query
+          description: Filter visitations starting from this date.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2024-10-01
+        - name: endDate
+          in: query
+          description: Filter visitations up to this date.
+          required: false
+          schema:
+            type: string
+            format: date
+            example: 2024-10-31
+        - name: status
+          in: query
+          description: Filter visitations by status.
+          required: false
+          schema:
+            type: string
+            example: Active
+        - name: visitorId
+          in: query
+          description: Filter visitations by visitor ID.
+          required: false
+          schema:
+            type: string
+            example: a5799a8a-8e07-420c-8c6d-de952cdebdd3
+        - name: residentId
+          in: query
+          description: Filter visitations by resident ID.
+          required: false
+          schema:
+            type: string
+            example: 695412b0-7c7b-4887-8494-317883816cdb
+      responses:
+        "200":
+          description: A successful response containing visitation information.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Error message.
-                    example: "Invalid query parameters."
-      security:
-        - bearerAuth: []
+                $ref: "#/components/schemas/VisitationResponse"
 components:
   securitySchemes:
     bearerAuth:
@@ -83,140 +138,194 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    ResidentObject:
+    ResidentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            residentlist:
+              type: array
+              items:
+                $ref: "#/components/schemas/Resident_Object"
+            count:
+              type: integer
+              example: 1
+    VisitorResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            visitorlist:
+              type: array
+              items:
+                $ref: "#/components/schemas/Visitor_Object"
+            count:
+              type: integer
+              example: 1
+    VisitationResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            visitationlist:
+              type: array
+              items:
+                $ref: "#/components/schemas/Visitation_Object"
+            count:
+              type: integer
+              example: 4
+    Resident_Object:
       type: object
       properties:
         Id:
           type: string
-          description: Resident ID.
-          example: 1234567891234567
+          example: 695412b0-7c7b-4887-8494-317883816cdb
         Name:
           type: string
-          description: Resident's name.
-          example: John Doe
+          example: Figarland Garling
         CaseId:
           type: string
-          description: Case ID of the resident.
-          example: CASE123456
+          example: 678D
         NRIC:
           type: string
-          description: NRIC of the resident.
-          example: S1234567A
-        MobileNumberCountryCode:
-          type: string
-          description: Resident's mobile number country code.
-          example: "+65"
-        MobileNumberCountryIso:
-          type: string
-          description: Resident's mobile number ISO code.
-          example: SG
-        MobileNumber:
-          type: string
-          description: Resident's mobile number.
-          example: "98765432"
-        SalutationId:
-          type: integer
-          description: Salutation ID.
-          example: 1234567891234567
-        DateOfBirth:
-          type: string
-          format: date
-          description: Resident's date of birth.
-          example: 2014-12-31
+          example: 678D
         AdmissionDate:
           type: string
           format: date
-          description: Admission date of the resident.
-          example: 2014-12-31
-        Remarks:
-          type: string
-          description: Additional remarks.
-          example: "Special attention needed"
-        MaritalStatusId:
-          type: integer
-          description: Marital status ID.
-          example: 1234567891234567
-        GenderId:
-          type: integer
-          description: Gender ID.
-          example: 1234567891234567
-        ReligionId:
-          type: integer
-          description: Religion ID.
-          example: 1234567891234567
-        RaceId:
-          type: integer
-          description: Race ID.
-          example: 1234567891234567
+          example: 2024-10-04
         ClientId:
           type: string
-          description: Client ID.
-          example: CLIENT12345
+          example: 4a687d93-5a89-4b01-a03d-f01fc2b0610f
         Layer1Id:
           type: string
-          description: Layer1 ID.
-          example: LAYER12345
+          example: 09cac92d-4606-4e48-8311-fbd014f4b05c
         BedId:
           type: string
-          description: Bed ID.
-          example: BED12345
-        IsDicharged:
-          type: boolean
-          description: Indicates if the resident is discharged.
-          example: false
-        DischargedDateTime:
-          type: string
-          format: date-time
-          description: Discharge date and time.
-          example: 2014-12-31T23:59:59.938Z
-        IsDeleted:
-          type: boolean
-          description: Indicates if the resident is deleted.
-          example: false
+          example: 9509c68d-8915-4421-a49f-892d480c18ac
         CreatedAt:
           type: string
           format: date-time
-          description: Creation timestamp.
-          example: 2014-12-31T23:59:59.938Z
-        CreatedBy:
-          type: integer
-          description: ID of the creator.
-          example: 1234567891234567
+          example: 2024-10-04T03:04:58Z
         ModifiedAt:
           type: string
           format: date-time
-          description: Last modification timestamp.
-          example: 2014-12-31T23:59:59.938Z
-        ModifiedBy:
-          type: integer
-          description: ID of the last modifier.
-          example: 1234567891234567
+          example: 2024-10-04T03:04:58Z
         IsAllowedToBeVisited:
           type: boolean
-          description: Indicates if the resident is allowed to be visited.
-          example: false
-        IsDIL:
-          type: boolean
-          description: Indicates if the resident is DIL.
-          example: false
-        IsOutOfResidence:
-          type: boolean
-          description: Indicates if the resident is out of residence.
-          example: false
-        OutOfResidenceReturnDate:
-          type: string
-          format: date
-          description: Return date for out-of-residence status.
-          example: 2014-12-31
-        OutOfResidenceRemarks:
-          type: string
-          description: Remarks for out-of-residence status.
-          example: "On vacation"
-        IsSpecialRulesActive:
-          type: boolean
-          description: Indicates if special rules are active for the resident.
-          example: false
+          example: true
         Location:
           type: string
-          description: Resident's location.
-          example: "Block A, Room 101"
+          example: 6A13
+        Visitor:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResidentVisitor_Object"
+    Visitor_Object:
+      type: object
+      properties:
+        Id:
+          type: string
+          example: a38d8e04-4d1f-438d-a5d8-76e183178e12
+        Name:
+          type: string
+          example: Carol Susetyo
+        PhoneCountryCode:
+          type: string
+          example: 65
+        PhoneCountryIso:
+          type: string
+          example: sg
+        PhoneNumber:
+          type: string
+          example: 7013456124
+        Email:
+          type: string
+          example: carol@mail.com
+        IsActive:
+          type: boolean
+          example: true
+        CreatedAt:
+          type: string
+          format: date-time
+          example: 2024-08-01T02:07:41Z
+        ModifiedAt:
+          type: string
+          format: date-time
+          example: 2024-12-06T08:24:20Z
+        BranchId:
+          type: string
+          example: 09cac92d-4606-4e48-8311-fbd014f4b05c
+        ClientId:
+          type: string
+          example: 4a687d93-5a89-4b01-a03d-f01fc2b0610f
+        VMSUserTypeId:
+          type: string
+          example: Staff
+        VMSUserSubTypeId:
+          type: string
+          example: SLEC
+    Visitation_Object:
+      type: object
+      properties:
+        Id:
+          type: string
+          example: 013840b2-267e-4128-9da0-d8a44c6c6728
+        VMSUserId:
+          type: object
+          properties:
+            Id:
+              type: string
+              example: a5799a8a-8e07-420c-8c6d-de952cdebdd3
+            Name:
+              type: string
+              example: Shanks
+        CardNumber:
+          type: string
+          example: ZFRLnCfw72
+        Date:
+          type: string
+          format: date
+          example: 2024-10-08
+        BeginDateTime:
+          type: string
+          format: date-time
+          example: 2024-10-08T07:00:00Z
+        EndDateTime:
+          type: string
+          format: date-time
+          example: 2024-10-08T08:00:00Z
+        CreatedAt:
+          type: string
+          format: date-time
+          example: 2024-10-04T03:05:33Z
+        ModifiedAt:
+          type: string
+          format: date-time
+          example: 2024-10-04T03:32:54Z
+        ClientId:
+          type: string
+          example: 4a687d93-5a89-4b01-a03d-f01fc2b0610f
+        BranchId:
+          type: string
+          example: 09cac92d-4606-4e48-8311-fbd014f4b05c
+        VisitationTypeId:
+          type: string
+          example: 52938711-fc32-4e5d-ac04-b0f43381ff72
+        VisitationStatusId:
+          type: string
+          example: 0e5c4fdb-fd79-4657-8c53-0317ab280ee9
+        TimeslotId:
+          type: string
+          example: a0e501b4-6b71-4caa-940a-118b3370ca12
+        ResidentId:
+          type: object
+          properties:
+            Id:
+              type: string
+              example: 695412b0-7c7b-4887-8494-317883816cdb
+            Name:
+              type: string
+              example: Figarland Garling
