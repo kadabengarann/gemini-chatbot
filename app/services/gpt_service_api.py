@@ -133,5 +133,5 @@ def generate_response(response, identifier, message_type=""):
     if "does not mention" in assistant_response:
         assistant_response = "Answer not available in context"
 
-    logging.info(f"        Assistant response: {assistant_response}") # Debugging line
-    return assistant_response
+    logging.info("Assistant response: %s", assistant_response) # Debugging line
+    return str(assistant_response)
