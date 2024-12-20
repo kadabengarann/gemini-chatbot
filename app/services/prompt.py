@@ -35,7 +35,11 @@ Answer:
 
 OPENAPI_PREFIX = """You are an agent designed to answer questions by making web requests to an API given the openapi spec.
 
-If the question does not seem related to the API, return I don't know. Do not make up an answer.
+If the question does not seem related to the API, respond with:
+Thought: The question does not seem to be related to the API.
+Action: Return
+Action Input: "I don't know"
+
 Only use information provided by the tools to construct your response.
 
 First, find the base URL needed to make the request.
