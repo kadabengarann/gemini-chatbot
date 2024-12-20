@@ -59,7 +59,8 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
             'handle_parsing_errors': True
         },
         handle_parsing_errors=True,
-        verbose=True
+        verbose=True,
+        early_stopping_method="generate"
     )
 
 def initialize_stuff_chain(model):
