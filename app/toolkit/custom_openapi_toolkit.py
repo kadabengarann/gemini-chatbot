@@ -34,6 +34,7 @@ class CustomOpenAPIToolkit(OpenAPIToolkit):
             agent_executor_kwargs={
                 "max_iterations": max_iterations,
                 "handle_parsing_errors": handle_parsing_errors,
+                "early_stopping_method": "generate",
             },
             **kwargs)
         return cls(
