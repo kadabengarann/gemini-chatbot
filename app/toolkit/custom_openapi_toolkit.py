@@ -21,6 +21,7 @@ class CustomOpenAPIToolkit(OpenAPIToolkit):
         allow_dangerous_requests: bool = False,
         prefix: str = prompt.JSON_PREFIX,
         suffix: str = JSON_SUFFIX,
+        max_iterations: int = 15,  
         **kwargs: Any,
     ) -> OpenAPIToolkit:
         """Create json agent from llm, then initialize."""
@@ -29,6 +30,7 @@ class CustomOpenAPIToolkit(OpenAPIToolkit):
             JsonToolkit(spec=json_spec), 
             prefix=prefix,
             suffix=suffix,
+            agent_executor_kwargs={"max_iterations": max_iterations},
             **kwargs)
         return cls(
             json_agent=json_agent,
