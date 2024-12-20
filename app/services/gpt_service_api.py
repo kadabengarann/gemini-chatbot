@@ -55,11 +55,11 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
         input_variables=["input", "agent_scratchpad", "history", "user_name", "current_date", "current_day"],
         agent_executor_kwargs={
             'memory': conversational_memory,
-            'handle_parsing_errors': True,
-            'max_iterations': 50
+            'handle_parsing_errors': True
         },
         handle_parsing_errors=True,
-        verbose=True
+        verbose=True,
+        max_iterations=50 
     )
 
 def initialize_stuff_chain(model):
