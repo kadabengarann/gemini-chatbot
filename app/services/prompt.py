@@ -33,13 +33,9 @@ Question:
 Answer:
 """
 
-OPENAPI_PREFIX = """You are an assistant designed to answer questions from user by making web requests to an API given the openapi spec.
+OPENAPI_PREFIX = """You are an agent designed to answer questions by making web requests to an API given the openapi spec.
 
-Answer it in human readable and professional, dont mention any technical terms that might confuse Asker.
-if Asker mentioned a name there are terms in endpoint that might you might need to know:
-- resident: a person who is a resident of the vms system.
-
-If the question does not seem related to the API, return This is beyond my current knowledge. Do not make up an answer.
+If the question does not seem related to the API, return I don't know. Or lookup Relevant pieces of previous conversation. Do not make up an answer.
 Only use information provided by the tools to construct your response.
 
 First, find the base URL needed to make the request.
