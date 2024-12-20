@@ -13,7 +13,8 @@ If you encounter a "KeyError", go back to the previous key, look at the availabl
 
 If the question does not seem to be related to the JSON, respond with:
 The question does not seem to be related to the JSON.
-Action: Return "I don't know"
+Action: Return
+Action Input: "I don't know"
 
 Always begin your interaction with the `json_spec_list_keys` tool with input "data" to see what keys exist in the JSON.
 
