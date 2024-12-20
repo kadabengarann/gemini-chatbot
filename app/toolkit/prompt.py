@@ -11,7 +11,10 @@ If you have not seen a key in one of those responses, you cannot use it.
 You should only add one key at a time to the path. You cannot add multiple keys at once.
 If you encounter a "KeyError", go back to the previous key, look at the available keys, and try again.
 
-If the question does not seem to be related to the JSON, just return "I don't know" as the answer.
+If the question does not seem to be related to the JSON, respond with:
+The question does not seem to be related to the JSON.
+Action: Return "I don't know"
+
 Always begin your interaction with the `json_spec_list_keys` tool with input "data" to see what keys exist in the JSON.
 
 Note that sometimes the value at a given path is large. In this case, you will get an error "Value is a large dictionary, should explore its keys directly".
