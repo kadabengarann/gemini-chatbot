@@ -52,5 +52,6 @@ def get_api_toolkit(model):
         requests_wrapper=vms_api_requests_wrapper, 
         allow_dangerous_requests=True,
         verbose=True,
-        max_iterations=50
+        max_iterations=50,
+        handle_parsing_errors=True
     )
