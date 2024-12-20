@@ -123,11 +123,12 @@ def generate_response(response, identifier, message_type=""):
         "current_day": current_day
     }
 
-    try:
-        assistant_response = agent.run(input_dict)
-    except Exception as e:
-        logging.error(f"Error during agent execution: {e}")
-        return str(e)
+    assistant_response = agent.run(input_dict)
+    # try:
+    #     assistant_response = agent.run(input_dict)
+    # except Exception as e:
+    #     logging.error(f"Error during agent execution: {e}")
+    #     return str(e)
 
     store_chat_history(agent.memory.chat_memory.messages, identifier, message_type)
 
