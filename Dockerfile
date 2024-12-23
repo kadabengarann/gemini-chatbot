@@ -11,7 +11,11 @@ WORKDIR $APP_HOME
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    build-essential gcc && \
+    build-essential \
+    python3-dev \
+    default-libmysqlclient-dev \
+    pkg-config \
+    gcc && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
