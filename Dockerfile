@@ -28,7 +28,7 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 # Expose the application port
-EXPOSE 5000
+EXPOSE 7860
 
 # Start the application with Gunicorn and Gevent
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--worker-class=gevent", "--worker-connections=1000", "--workers=3", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--worker-class=gevent", "--worker-connections=1000", "--workers=3", "wsgi:app"]
