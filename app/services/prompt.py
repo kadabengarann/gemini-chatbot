@@ -35,6 +35,7 @@ Answer:
 
 OPENAPI_PREFIX = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
 
+Answer it in human readable and professional, dont mention any technical terms that might confuse Asker.
 if Asker mentioned a name there are terms in endpoint that might you might need to know:
 - resident: a person who is a resident of the vms system.
 
