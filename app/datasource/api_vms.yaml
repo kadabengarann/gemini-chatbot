@@ -267,6 +267,51 @@ components:
         VMSUserSubTypeId:
           type: string
           example: SLEC
+    ResidentVisitor_Object:
+      type: object
+      description: Details about the relationship between a resident and a visitor.
+      properties:
+        Id:
+          type: string
+          default: ""
+        ResidentId:
+          $ref: "#/components/schemas/ListItem_Object"
+        VisitorId:
+          $ref: "#/components/schemas/ListItem_Object"
+        IsMainVisitor:
+          type: boolean
+          example: false
+        IsAllowedToVisit:
+          type: boolean
+          example: false
+        IsActive:
+          type: boolean
+          example: false
+        IsDeleted:
+          type: boolean
+          example: false
+        CreatedAt:
+          type: string
+          format: date-time
+          example: "2014-12-31T23:59:59.938Z"
+        ModifiedAt:
+          type: string
+          format: date-time
+          example: "2014-12-31T23:59:59.938Z"
+        Relationship:
+          type: string
+          default: ""
+        IsCaregiver:
+          type: boolean
+          example: false
+        CaregiverStartTime:
+          type: string
+          format: date-time
+          example: "2014-12-31T23:59:59.938Z"
+        CaregiverEndTime:
+          type: string
+          format: date-time
+          example: "2014-12-31T23:59:59.938Z"
     Visitation_Object:
       type: object
       properties:
