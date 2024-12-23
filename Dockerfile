@@ -5,33 +5,38 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV APP_HOME /app
 
+# Create and set permissions for the application directory
+RUN mkdir -p $APP_HOME && \
+    chown -R 1000:1000 $APP_HOME
+
+# Switch to a non-root user for security
+USER 1000:1000
+
 # Set the working directory
 WORKDIR $APP_HOME
 
-# Install system dependencies
+# Copy only requirements.txt to leverage Docker cache
+COPY --chown=1000:1000 requirements.txt .
+
+# Install system dependencies and Python packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    build-essential \
-    python3-dev \
-    default-libmysqlclient-dev \
-    pkg-config \
-    gcc && \
+        build-essential \
+        default-libmysqlclient-dev \
+        pkg-config \
+        gcc && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apt-get remove -y build-essential gcc && \
+    apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy application source code
-COPY . .
-
-# Adjust permissions
-RUN chmod -R u+w /app/app/datasource
+# Copy the rest of the application code
+COPY --chown=1000:1000 . .
 
 # Expose the application port
 EXPOSE 7860
 
-# Start the application with Gunicorn and Gevent
+# Define the command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--worker-class=gevent", "--worker-connections=1000", "--workers=3", "wsgi:app"]
