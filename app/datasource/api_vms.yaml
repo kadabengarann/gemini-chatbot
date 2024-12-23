@@ -16,7 +16,8 @@ paths:
   /residents:
     get:
       summary: Get Resident Information
-      description: Retrieve a list of residents based on query parameters such as name and ID.
+      description: |
+        Retrieve a list of residents based on query parameters such as name and ID. The response includes detailed resident data, including personal details, admission date, and status. Additionally, it contains visitor-related information for each resident, such as relationships, visitation permissions, and caregiver details.
       operationId: Resident
       tags:
         - VMS_API
@@ -45,7 +46,8 @@ paths:
   /visitors:
     get:
       summary: Get Visitor Information
-      description: Retrieve a list of visitors based on query parameters such as name and ID.
+      description: |
+        Retrieve a list of visitors based on query parameters such as name and ID. The response includes visitor details, such as personal information, contact details, and related metadata.
       operationId: Visitor
       tags:
         - VMS_API
@@ -74,7 +76,8 @@ paths:
   /visitations:
     get:
       summary: Get Visitation Information
-      description: Retrieve a list of visitations based on query parameters such as date, visitor ID, and resident ID.
+      description: |
+        Retrieve a list of visitations based on query parameters such as date, visitor ID, and resident ID. The response includes detailed visitation records, including date, time, visitation status, and associated resident and visitor information.
       operationId: Visitation
       tags:
         - VMS_API
