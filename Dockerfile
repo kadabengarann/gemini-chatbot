@@ -27,6 +27,9 @@ RUN pip install --upgrade pip && \
 # Copy application source code
 COPY . .
 
+# Adjust permissions
+RUN chmod -R u+w /app/datasource
+
 # Expose the application port
 EXPOSE 7860
 
