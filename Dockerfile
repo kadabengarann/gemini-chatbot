@@ -39,7 +39,7 @@ COPY --chown=1000:1000 . .
 USER 1000:1000
 
 # Expose the application port
-EXPOSE 7860
+EXPOSE 5005
 
 # Define the command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--worker-class=gevent", "--worker-connections=1000", "--workers=3", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5005", "--worker-class=gevent", "--worker-connections=1000", "--workers=3", "wsgi:app"]
