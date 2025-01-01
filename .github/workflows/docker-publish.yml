@@ -37,3 +37,15 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+  deploy:
+      name: Deploy Image
+      needs: publish
+      runs-on: self-hosted
+
+      steps:
+      - name: Deploy with Docker Compose
+        run: |
+          cd ${{ secrets.WORK_DIR }}
+          docker compose pull
+          docker compose up -d
+    
