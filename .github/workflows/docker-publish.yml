@@ -38,13 +38,17 @@ jobs:
         platforms: linux/amd64,linux/arm64
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
   deploy:
-      name: Deploy Image
-      needs: publish
-      runs-on: self-hosted
+    name: Deploy Image
+    needs: publish
+    runs-on: ${{ vars.RUNNER }}
 
-      steps:
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Deploy with Docker Compose
         run: |
+          cd ~
           cd ${{ secrets.WORK_DIR }}
           docker compose pull
           docker compose up -d
