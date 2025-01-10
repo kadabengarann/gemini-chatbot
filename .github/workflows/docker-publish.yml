@@ -40,7 +40,7 @@ jobs:
   deploy:
       name: Deploy Image
       needs: publish
-      runs-on: [self-hosted, azure-instance]
+      runs-on: self-hosted
 
       steps:
       - name: Deploy with Docker Compose
