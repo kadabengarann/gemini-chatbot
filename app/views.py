@@ -113,7 +113,10 @@ def webhook_post():
 # New routes
 @webhook_blueprint.route('/', methods=['GET'])
 def hello():
-    return jsonify({"IsSuccess": True})
+    return jsonify({"IsSuccess": True,
+                    "ModelName": current_app.config['MODEL_NAME'],
+                    "UsingGPT": current_app.config['IS_USING_GPT'],
+                    })
     
 @webhook_blueprint.route('/start', methods=['GET'])
 def start_conversation():
