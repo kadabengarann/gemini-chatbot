@@ -131,7 +131,7 @@ def generate_response(response, identifier, message_type=""):
     #     logging.error(f"Error during agent execution: {e}")
     #     return str(e)
 
-    store_chat_history(agent.memory.chat_memory.messages, identifier, message_type)
+    # store_chat_history(agent.memory.chat_memory.messages, identifier, message_type)
 
     if "does not mention" in assistant_response:
         assistant_response = "Answer not available in context"
