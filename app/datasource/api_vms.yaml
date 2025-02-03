@@ -4,11 +4,6 @@ info:
   version: 1.0.0
   description: |
     The VMS API allows fetching a list of residents filtered by parameters such as name and ID.
-  termsOfService: https://example.com/terms
-  contact:
-    name: API Support
-    url: https://example.com/support
-    email: support@example.com
 servers:
   - url: https://outdev.werkdone.com/VMS_BL/rest/ChatBot/v1
     description: Development environment
