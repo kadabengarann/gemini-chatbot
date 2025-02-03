@@ -51,15 +51,15 @@ class MyChatTogether(ChatTogether):
     def get_num_tokens_from_messages(self, messages):
         """
         Calculate the number of tokens in a list of messages using tiktoken.
-        Each message is expected to be a dictionary with at least a "content" key.
+        Each message is expected to have a 'content' attribute.
         """
         total_tokens = 0
         for message in messages:
-            content = message.get("content", "")
+            # Use getattr to retrieve content if message is an object (like AIMessage).
+            content = getattr(message, "content", "")
             try:
                 tokens = self.tokenizer.encode(content)
-                token_count = len(tokens)
-                total_tokens += token_count
+                total_tokens += len(tokens)
             except Exception as e:
                 logging.error("Tokenization error for message '%s': %s", content, e)
                 # Fallback heuristic: assume ~1 token per 4 characters.
