@@ -41,7 +41,7 @@ def initialize_model():
         model_name = current_app.config.get('MODEL_NAME')
         if not model_name:
             raise ValueError("MODEL_NAME environment variable not set")
-        _model = myModel.MyChatTogether(model_name=model_name, temperature=0)
+        _model = myModel.MyChatTogether(model=model_name, temperature=0)
     return _model
 
 def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_name): 
