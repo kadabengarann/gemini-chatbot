@@ -2,6 +2,7 @@ import logging
 import tiktoken  # Make sure to install this with: pip install tiktoken
 from flask import current_app
 from langchain_together import ChatTogether
+from pydantic import Field
 
 def get_tokenizer_for_model(model_name: str):
     """
@@ -31,13 +32,21 @@ def get_tokenizer_for_model(model_name: str):
 
 # Custom subclass of ChatTogether with an implementation for token counting.
 class MyChatTogether(ChatTogether):
+    # Declare tokenizer as a field.
+    tokenizer: any = Field(default=None)
+
+    class Config:
+        # Allow setting extra attributes not declared in the model schema.
+        extra = "allow"
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Dynamically select tokenizer based on the MODEL_NAME in your Flask config.
         model_name = current_app.config.get('MODEL_NAME')
         if not model_name:
             raise ValueError("MODEL_NAME environment variable not set")
-        self.tokenizer = get_tokenizer_for_model(model_name)
+        # Use object.__setattr__ to bypass Pydantic's immutability.
+        object.__setattr__(self, "tokenizer", get_tokenizer_for_model(model_name))
 
     def get_num_tokens_from_messages(self, messages):
         """
