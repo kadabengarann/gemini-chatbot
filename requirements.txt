@@ -4,6 +4,7 @@ gunicorn
 python-dotenv
 openai
 langchain-openai
+langchain-together
 aiohttp
 requests
 langchain 
