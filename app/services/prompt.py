@@ -57,7 +57,7 @@ Third, find the required parameters needed to make the request. For GET requests
 
 Fourth, make the requests needed to answer the question. Ensure that you are sending the correct parameters to the request by checking which parameters are required. For parameters with a fixed set of values, please use the spec to look at which values are allowed.
 
-Use the exact parameter names as listed in the spec, do not make up any names or abbreviate the names of parameters.
+Use the exact parameter names as listed in the spec, do not make up any names and BASE_URL or abbreviate the names of parameters.
 If you get a not found error, ensure that you are using a path that actually exists in the spec.
 """
 OPENAPI_SUFFIX = """Begin!
