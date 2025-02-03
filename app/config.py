@@ -20,6 +20,7 @@ def load_configurations(app):
     app.config["VMS_API_KEY"] = os.getenv('VMS_API_KEY', os.environ.get('VMS_API_KEY'))
     app.config["IS_USING_DB"] = os.environ.get('IS_USING_DB', 'True').lower() == 'true'
     app.config["IS_USING_GPT"] = os.environ.get('IS_USING_GPT', 'True').lower() == 'true'
+    app.config["IS_USING_EXTERNAL"] = os.environ.get('IS_USING_EXTERNAL', 'True').lower() == 'true'
     app.config["IS_USING_API"] = os.environ.get('IS_USING_API', 'True').lower() == 'true'
     os.environ['LANGCHAIN_API_KEY']= os.getenv('LANGCHAIN_API_KEY', os.environ.get('LANGCHAIN_API_KEY', ''))
     os.environ['LANGCHAIN_TRACING_V2']="true"
