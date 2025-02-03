@@ -65,7 +65,7 @@ Current User data:
 Current Asker Name: {user_name}
 Current Date: {current_date}
 Current Day: {current_day}
-
+BASE_URL API: https://outdev.werkdone.com/VMS_BL/rest/ChatBot/v1
 Relevant pieces of previous conversation:
 {history}
 (You do not need to use these pieces of information if not relevant)
