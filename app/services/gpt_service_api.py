@@ -6,7 +6,6 @@ from ..services import external_api_service as api_service, prompt
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
 from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain_community.agent_toolkits import create_openapi_agent
@@ -41,8 +40,7 @@ def initialize_model():
         model_name = current_app.config.get('MODEL_NAME')
         if not model_name:
             raise ValueError("MODEL_NAME environment variable not set")
-        # _model = ChatOpenAI(model_name=model_name, temperature=0.3)
-        _model = OpenAI(model=model_name, temperature=0.3)
+        _model = ChatOpenAI(model_name=model_name, temperature=0.3)
     return _model
 
 def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_name): 
