@@ -48,7 +48,7 @@ class ChatOpenRouter(ChatOpenAI):
 
         super().__init__(
             openai_api_base=openai_api_base,
-            openai_api_key=secret_key,  # ✅ Pass as SecretStr
+            openai_api_key=secret_key,
             model_name=model_name,
             **kwargs
         )
