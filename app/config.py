@@ -8,6 +8,7 @@ def load_configurations(app):
     load_dotenv()
     app.config["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY', os.environ.get('OPENAI_API_KEY'))
     app.config["TOGETHER_API_KEY"] = os.getenv('TOGETHER_API_KEY', os.environ.get('TOGETHER_API_KEY'))
+    app.config["OPENROUTER_API_KEY"] = os.getenv('OPENROUTER_API_KEY', os.environ.get('OPENROUTER_API_KEY'))
     app.config["ACCESS_TOKEN"] = os.getenv('ACCESS_TOKEN', os.environ.get('ACCESS_TOKEN'))
     app.config["APP_ID"] = os.getenv('APP_ID', os.environ.get('APP_ID'))
     app.config["APP_SECRET"] = os.getenv('APP_SECRET', os.environ.get('APP_SECRET'))
@@ -20,7 +21,8 @@ def load_configurations(app):
     app.config["VMS_API_KEY"] = os.getenv('VMS_API_KEY', os.environ.get('VMS_API_KEY'))
     app.config["IS_USING_DB"] = os.environ.get('IS_USING_DB', 'True').lower() == 'true'
     app.config["IS_USING_GPT"] = os.environ.get('IS_USING_GPT', 'True').lower() == 'true'
-    app.config["IS_USING_EXTERNAL"] = os.environ.get('IS_USING_EXTERNAL', 'True').lower() == 'true'
+    app.config["IS_USING_EXTERNAL_PROVIDER"] = os.environ.get('IS_USING_EXTERNAL_PROVIDER', 'True').lower() == 'true'
+    app.config["EXTERNAL_PROVIDER_NAME"] = os.getenv('EXTERNAL_PROVIDER_NAME', os.environ.get('EXTERNAL_PROVIDER_NAME'))
     app.config["IS_USING_API"] = os.environ.get('IS_USING_API', 'True').lower() == 'true'
     os.environ['LANGCHAIN_API_KEY']= os.getenv('LANGCHAIN_API_KEY', os.environ.get('LANGCHAIN_API_KEY', ''))
     os.environ['LANGCHAIN_TRACING_V2']="true"

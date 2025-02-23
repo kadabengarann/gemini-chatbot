@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 from flask import current_app
 from ..services import external_api_service as api_service, prompt
-from ..model import my_chattogether as myModel
+from ..model import chattogether_model as myModel
 from langchain import PromptTemplate
 from langchain.chains.question_answering import load_qa_chain
 from langchain_together import ChatTogether
