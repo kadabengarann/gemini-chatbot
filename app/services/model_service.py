@@ -10,6 +10,7 @@ EXTERNAL_PROVIDER_NAME = None
 def generate_response(response, identifier, message_type=""):
     IS_USING_API = current_app.config['IS_USING_API']
     IS_USING_GPT = current_app.config['IS_USING_GPT']
+    IS_USING_EXTERNAL_PROVIDER = current_app.config['IS_USING_EXTERNAL_PROVIDER']
     EXTERNAL_PROVIDER_NAME = current_app.config['EXTERNAL_PROVIDER_NAME']
 
     if IS_USING_API:
