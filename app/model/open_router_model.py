@@ -5,6 +5,7 @@ from langchain_together import Together
 from langchain_openai import ChatOpenAI
 from pydantic import Field
 from typing import Optional
+from pydantic import SecretStr
 
 def get_tokenizer_for_model(model_name: str):
     """
@@ -43,9 +44,15 @@ class ChatOpenRouter(ChatOpenAI):
                  openai_api_base: str = "https://openrouter.ai/api/v1",
                  **kwargs):
         openai_api_key = openai_api_key or current_app.config.get('OPENROUTER_API_KEY')
-        super().__init__(openai_api_base=openai_api_base,
-                         openai_api_key=openai_api_key,
-                         model_name=model_name, **kwargs)
+        secret_key = SecretStr(openai_api_key) if openai_api_key else None
+
+        super().__init__(
+            openai_api_base=openai_api_base,
+            openai_api_key=secret_key,  # ✅ Pass as SecretStr
+            model_name=model_name,
+            **kwargs
+        )
+
 
 # Custom subclass of ChatTogether with an implementation for token counting.
 class MyChatTogether(Together):
