@@ -4,6 +4,7 @@ from flask import current_app
 from langchain_together import Together
 from langchain_openai import ChatOpenAI
 from pydantic import Field
+from typing import Optional
 
 def get_tokenizer_for_model(model_name: str):
     """
