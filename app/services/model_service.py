@@ -20,7 +20,7 @@ def generate_response(response, identifier, message_type=""):
         if EXTERNAL_PROVIDER_NAME == "Together":
           from .together_service_api  import generate_response as model_generate_response
         elif EXTERNAL_PROVIDER_NAME == "OpenRouter":
-          from .together_service_api  import generate_response as model_generate_response
+          from .open_router_service_api  import generate_response as model_generate_response
       else:
         from ..services.gemini_service_api  import generate_response as model_generate_response
     else:
