@@ -44,14 +44,16 @@ class ChatOpenRouter(ChatOpenAI):
                  openai_api_base: str = "https://openrouter.ai/api/v1",
                  **kwargs):
         openai_api_key = openai_api_key or current_app.config.get('OPENROUTER_API_KEY')
-        secret_key = SecretStr(openai_api_key) if openai_api_key else None
+        if openai_api_key:
+            openai_api_key = str(openai_api_key)
 
         super().__init__(
             openai_api_base=openai_api_base,
-            openai_api_key=secret_key,
+            openai_api_key=openai_api_key,
             model_name=model_name,
             **kwargs
         )
+
 
 
 # Custom subclass of ChatTogether with an implementation for token counting.
