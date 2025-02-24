@@ -129,6 +129,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VisitationResponse"
+  /visitor-availability:
+    get:
+      summary: Check Visitor Availability
+      description: |
+        Retrieve the availability status of a visitor based on query parameters such as name and ID.
+        The response includes the resident they are visiting, the assigned timeslot, and any remarks about their visit.
+      operationId: VisitorAvailability
+      tags:
+        - VMS_API
+      parameters:
+        - name: id
+          in: query
+          description: Filter visitor availability by ID.
+          required: false
+          schema:
+            type: string
+            example: a38d8e04-4d1f-438d-a5d8-76e183178e12
+        - name: name
+          in: query
+          description: Filter visitor availability by name.
+          required: false
+          schema:
+            type: string
+            example: Carol Susetyo
+      responses:
+        "200":
+          description: A successful response containing visitor availability information.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitorAvailabilityResponse"
 components:
   securitySchemes:
     bearerAuth:
@@ -175,6 +206,20 @@ components:
             count:
               type: integer
               example: 4
+    VisitorAvailabilityResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            ResidentId:
+              $ref: "#/components/schemas/ListItem_Object"
+            Timeslot:
+              type: string
+              example: "10:00 - 19:00"
+            Remarks:
+              type: string
+              example: "Denied by Outside Access Time."
     Resident_Object:
       type: object
       properties:
