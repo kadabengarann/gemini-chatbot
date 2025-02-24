@@ -34,27 +34,18 @@ def get_tokenizer_for_model(model_name: str):
         raise
 
 class ChatOpenRouter(ChatOpenAI):
-    openai_api_base: str
-    openai_api_key: str
-    model_name: str
+    class Config:
+        # Allow setting extra attributes not declared in the model schema.
+        extra = "allow"
 
-    def __init__(self,
-                 model_name: str,
-                 openai_api_key: Optional[str] = None,
-                 openai_api_base: str = "https://openrouter.ai/api/v1",
-                 **kwargs):
-        openai_api_key = openai_api_key or current_app.config.get('OPENROUTER_API_KEY')
-        if openai_api_key:
-            openai_api_key = str(openai_api_key)
-
+    def __init__(self, model_name: str, **kwargs):
         super().__init__(
-            openai_api_base=openai_api_base,
-            openai_api_key=openai_api_key,
+            openai_api_key= current_app.config.get("OPENROUTER_API_KEY"),
+            openai_api_base= "https://openrouter.ai/api/v1",
             model_name=model_name,
-            **kwargs
+            **kwargs  # Pass any additional arguments to the parent class
         )
-
-
+        
 
 # Custom subclass of ChatTogether with an implementation for token counting.
 class MyChatTogether(Together):
