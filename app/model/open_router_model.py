@@ -45,6 +45,25 @@ class ChatOpenRouter(ChatOpenAI):
             model_name=model_name,
             **kwargs  # Pass any additional arguments to the parent class
         )
+        object.__setattr__(self, "tokenizer", get_tokenizer_for_model(model_name))
+        
+    def get_num_tokens_from_messages(self, messages):
+        """
+        Calculate the number of tokens in a list of messages using tiktoken.
+        Each message is expected to have a 'content' attribute.
+        """
+        total_tokens = 0
+        for message in messages:
+            # Use getattr to retrieve content if message is an object (like AIMessage).
+            content = getattr(message, "content", "")
+            try:
+                tokens = self.tokenizer.encode(content)
+                total_tokens += len(tokens)
+            except Exception as e:
+                logging.error("Tokenization error for message '%s': %s", content, e)
+                # Fallback heuristic: assume ~1 token per 4 characters.
+                total_tokens += len(content) // 4
+        return total_tokens
         
 
 # Custom subclass of ChatTogether with an implementation for token counting.
