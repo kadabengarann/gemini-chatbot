@@ -12,7 +12,7 @@ paths:
     get:
       summary: Get Resident Information
       description: |
-        Retrieve a list of residents based on query parameters such as name and ID. The response includes detailed resident data, including personal details, admission date, and status. Additionally, it contains visitor-related information for each resident, such as relationships, visitation permissions, and caregiver details.
+        Retrieve a list of residents based on query parameters such as name and ID.
       operationId: Resident
       tags:
         - VMS_API
