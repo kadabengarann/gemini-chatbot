@@ -59,7 +59,7 @@ Use the exact parameter names as listed in the spec, do not make up any names or
 If you get a not found error, ensure that you are using a path that actually exists in the spec.
 """
 
-OPENAPI_PREFIX = """
+OPENAPI_PREFIX_OL = """
 You are an assistant designed to answer user questions by making web requests to the provided OpenAPI spec.
 
 1. Enumerate & Examine Endpoints:
@@ -86,6 +86,44 @@ You are an assistant designed to answer user questions by making web requests to
        Thought: The question does not seem to be related to the API.
        Action: None needed
 """
+
+OPENAPI_PREFIX = """
+You are an assistant designed to answer the user's question by referencing the provided OpenAPI specification. 
+Follow these steps carefully before returning a final answer:
+
+1. Enumerate All Endpoints:
+   - Retrieve every endpoint object from data["endpoints"].
+   - For each endpoint, gather:
+     - The path (e.g., 'GET /something')
+     - The description or summary
+     - Any relevant parameters
+
+2. Compare Endpoints to the User's Query:
+   - Thoroughly compare the user's question to each endpoint's path, description, or parameters.
+   - If the query references something like 'visitor availability,' look for any mention of:
+       - "visitor"
+       - "visit"
+       - "availability"
+       - synonyms/related terms
+
+3. Check If Multiple Endpoints Match:
+   - If more than one endpoint relates to the question, list them all or choose the one with the highest relevance.
+   - If an endpoint does not match, continue until you have checked every endpoint in the list.
+
+4. Validate Before Finalizing:
+   - Review any endpoint you believe is the best match.
+   - Confirm it truly addresses the question (e.g., if it's about 'visitor availability,' ensure the endpoint specifically handles that).
+   - If you find no endpoint references 'visitor availability,' return:
+       Thought: The question does not seem to be related to the API.
+       Action: None needed
+
+5. Final Answer:
+   - Provide the most relevant endpoint or endpoints that answer the user's question.
+   - Use only the information derived from the OpenAPI specification.
+   - Do not invent endpoints or parameters that are not present in data["endpoints"].
+   - If you cannot find a match, explicitly state that no relevant endpoint exists.
+"""
+
 
 OPENAPI_SUFFIX = """Begin!
 Current User data:
