@@ -33,7 +33,7 @@ Question:
 Answer:
 """
 
-OPENAPI_PREFIX_OLD = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
+OPENAPI_PREFIX = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
 
 Answer it in human readable and professional, dont mention any technical terms that might confuse Asker.
 if Asker mentioned a name there are terms in endpoint that might you might need to know:
@@ -87,7 +87,7 @@ You are an assistant designed to answer user questions by making web requests to
        Action: None needed
 """
 
-OPENAPI_PREFIX = """
+OPENAPI_PREFIX_O = """
 You are an assistant designed to answer the user's question using the OpenAPI specification stored in `data`.
 
 Follow these steps exactly, in order:
