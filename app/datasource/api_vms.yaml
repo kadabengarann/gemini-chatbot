@@ -8,6 +8,37 @@ servers:
   - url: https://outdev.werkdone.com/VMS_BL/rest/ChatBot/v1
     description: Development environment
 paths:
+  /visitor-availability:
+      get:
+        summary: Check Visitor Availability
+        description: |
+          Retrieve the availability status of a visitor based on query parameters such as name and ID.
+          The response includes the resident they are visiting, the assigned timeslot, and any remarks about their visit.
+        operationId: VisitorAvailability
+        tags:
+          - VMS_API
+        parameters:
+          - name: id
+            in: query
+            description: Filter visitor availability by ID.
+            required: false
+            schema:
+              type: string
+              example: a38d8e04-4d1f-438d-a5d8-76e183178e12
+          - name: name
+            in: query
+            description: Filter visitor availability by name.
+            required: false
+            schema:
+              type: string
+              example: Carol Susetyo
+        responses:
+          "200":
+            description: A successful response containing visitor availability information.
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/VisitorAvailabilityResponse"
   /residents:
     get:
       summary: Get Resident Information
@@ -129,37 +160,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VisitationResponse"
-  /visitor-availability:
-    get:
-      summary: Check Visitor Availability
-      description: |
-        Retrieve the availability status of a visitor based on query parameters such as name and ID.
-        The response includes the resident they are visiting, the assigned timeslot, and any remarks about their visit.
-      operationId: VisitorAvailability
-      tags:
-        - VMS_API
-      parameters:
-        - name: id
-          in: query
-          description: Filter visitor availability by ID.
-          required: false
-          schema:
-            type: string
-            example: a38d8e04-4d1f-438d-a5d8-76e183178e12
-        - name: name
-          in: query
-          description: Filter visitor availability by name.
-          required: false
-          schema:
-            type: string
-            example: Carol Susetyo
-      responses:
-        "200":
-          description: A successful response containing visitor availability information.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/VisitorAvailabilityResponse"
 components:
   securitySchemes:
     bearerAuth:
