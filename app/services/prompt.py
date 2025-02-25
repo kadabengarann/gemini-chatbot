@@ -79,7 +79,7 @@ Guidelines:
 
 4. Steps for Answering:
    - First, identify the base URL from the spec.
-   - Second, find the relevant path(s) that address the user’s request.
+   - Second, find the relevant path(s) that address the user's request.
    - Third, determine the required parameters or request body fields from the spec:
      * GET requests → typically URL parameters.
      * POST requests → usually request body fields.
