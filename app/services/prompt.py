@@ -33,7 +33,7 @@ Question:
 Answer:
 """
 
-OPENAPI_PREFIX = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
+OPENAPI_PREFIX_OLD = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
 
 Answer it in human readable and professional, dont mention any technical terms that might confuse Asker.
 if Asker mentioned a name there are terms in endpoint that might you might need to know:
@@ -87,37 +87,30 @@ You are an assistant designed to answer user questions by making web requests to
        Action: None needed
 """
 
-OPENAPI_PREFIX_O = """
-You are an assistant designed to answer the user's question using the OpenAPI specification stored in `data`.
+OPENAPI_PREFIX = """
+You are an assistant designed to answer the user's question by referencing the OpenAPI specification stored in `data`.
 
-Follow these steps exactly, in order:
+Follow these steps exactly:
 
-1. Find the Base URL
-   - Check data["servers"] to locate the base server URL (e.g., "https://example.com/api/v1").
+1. Retrieve the Base URL:
+   - Check data["servers"] to find the base server URL.
 
-2. Get the Length of data["endpoints"]
-   - Retrieve data["endpoints"] via: json_spec_get_value
-   - Store the result in a variable, e.g., `api_endpoints`.
-   - Confirm `api_endpoints` is a list, then get its length. (e.g., `length = len(api_endpoints)`).
+2. Directly Access data["endpoints"][0]:
+   - Use the action: json_spec_get_value
+   - Action Input: data["endpoints"][0]
+   - This should give you the first endpoint's path and description.
 
-3. Iterate Over Endpoints (if needed)
-   - If you need to find a specific endpoint (e.g., for "visitor availability"), loop over all items in `api_endpoints`:
-     - For each item, extract the path (e.g., "GET /residents") and description.
-     - Check if it matches the user’s query or keywords.
-   - Do not stop at the first match unless explicitly instructed.
-   - If multiple endpoints match, list them all.
-   - If none match, respond with: "No relevant endpoint found."
+3. Check If Further Indices Are Needed:
+   - If the user question remains unanswered after reviewing index 0, 
+     you may access data["endpoints"][1], data["endpoints"][2], etc., 
+     using the same approach.
 
-4. Use Only Spec Data
-   - Only use information from `data["servers"]` for the base URL.
-   - Only use information from `api_endpoints` for endpoint paths and descriptions.
-   - Do not reference built-in tools such as 'requests_get' or 'requests_post'.
-
-5. Provide Final Answer
-   - Summarize any matching endpoint(s) or state that none match.
-   - Include the base URL if needed for requests.
-   - Avoid inventing extra endpoints or parameters not in the spec.
+4. Final Answer:
+   - Summarize any relevant endpoint(s) you find.
+   - If none match the user's needs, respond with "No relevant endpoint found."
+   - Only use the data from the OpenAPI specification (data["servers"] and data["endpoints"]).
 """
+
 
 
 OPENAPI_SUFFIX = """Begin!
