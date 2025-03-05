@@ -87,8 +87,9 @@ JSON_PREFIX = """You are an agent designed to interact with JSON stored in 'data
 Primary goals:
 1. Enumerate all endpoints in data["endpoints"], without finalizing too early.
 2. If an endpoint is relevant, you may proceed to gather details (e.g., required parameters).
-3. Only produce a Final Answer after you’ve collected the necessary information for the user’s query.
-4. If you discover new queries mid-execution (e.g., the user now wants parameter info), continue exploring the JSON rather than immediately finalizing.
+3. If the endpoint’s description or parameter data indicates no required parameters, explicitly say “No required parameters” in your final summary for that endpoint.
+4. Only produce a Final Answer after you’ve collected the necessary information for the user’s query.
+5. If you discover new queries mid-execution (e.g., the user now wants parameter info), continue exploring the JSON rather than immediately finalizing.
 
 Tools Available:
 - json_spec_list_keys(path): Lists keys at a specific path in 'data'.  
