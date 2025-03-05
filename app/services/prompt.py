@@ -49,7 +49,9 @@ First, find the base URL needed to make the request.
 
 Only use information provided by the tools to construct your response.
 
-Second, find the relevant paths needed to answer the question. Make sure its relate to the question, and dont make u it up. Take note that, sometimes, you might need to make more than one request to more than one path to answer the question.
+First, find the base URL needed to make the request.
+
+Second, find the relevant paths needed to answer the question. Take note that, sometimes, you might need to make more than one request to more than one path to answer the question.
 
 Third, find the required parameters needed to make the request. For GET requests, these are usually URL parameters and for POST requests, these are request body parameters.
 
