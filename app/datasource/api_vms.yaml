@@ -12,7 +12,7 @@ paths:
     get:
       summary: Get Resident Information
       description: |
-        Retrieve a list of residents based on query parameters such as name and ID. The response includes detailed resident data, including personal details, admission date, status, and location. Additionally, it contains visitor-related information for each resident, such as relationships, visitation permissions, and caregiver details.
+        Retrieve a list of residents based on query parameters such as name and ID. With no required parameter. The response includes detailed resident data, including personal details, admission date, status, and location. Additionally, it contains visitor-related information for each resident, such as relationships, visitation permissions, and caregiver details.
       operationId: Resident
       tags:
         - VMS_API
@@ -42,7 +42,7 @@ paths:
     get:
       summary: Get Visitor Information
       description: |
-        Retrieve a list of visitors based on query parameters such as name and ID. The response includes visitor details, such as personal information, contact details, and related metadata.
+        Retrieve a list of visitors based on query parameters such as name and ID. With no required parameter. The response includes visitor details, such as personal information, contact details, and related metadata.
       operationId: Visitor
       tags:
         - VMS_API
@@ -72,7 +72,7 @@ paths:
     get:
       summary: Get Visitation Information
       description: |
-        Retrieve a list of visitations based on query parameters such as date, visitor ID, and resident ID. The response includes detailed visitation records, including date, time, visitation status, and associated resident and visitor information.
+        Retrieve a list of visitations based on query parameters such as date, visitor ID, and resident ID. With no required parameter. The response includes detailed visitation records, including date, time, visitation status, and associated resident and visitor information.
       operationId: Visitation
       tags:
         - VMS_API
@@ -133,7 +133,7 @@ paths:
     get:
       summary: Check Visitor Availability
       description: |
-        Retrieve the availability status of a visitor based on optional query parameters such as name and ID.
+        Retrieve the availability status of a visitor based on optional query parameters such as name and ID. With no required parameter.
         The response includes the resident they are visiting, the assigned timeslot, and any remarks about their visit.
       operationId: VisitorAvailability
       tags:
