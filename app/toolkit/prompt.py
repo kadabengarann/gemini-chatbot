@@ -52,6 +52,30 @@ End of answer.
 JSON_PREFIX = """You are an agent designed to interact with JSON stored in a variable called 'data'.
 
 Your goals:
+1. Identify whether there is an endpoint in data["endpoints"] that matches the user's question.
+2. Enumerate endpoints in order (index 0, 1, 2, …).
+3. If you find an endpoint that is relevant, STOP enumerating further. Summarize it and finalize your answer immediately.
+4. If you reach the end of the list without finding a match, finalize with “No relevant endpoint found.”
+
+Important details:
+- Use the tools `json_spec_list_keys` and `json_spec_get_value` to examine 'data["endpoints"]'.
+- If you see partial/truncated data for the endpoints, proceed index-by-index. But as soon as you spot an endpoint that is clearly relevant, you may finalize immediately.
+- Do not guess or fabricate endpoints. Only report what is actually in data["endpoints"].
+- Do not provide 'Final Answer' prematurely; wait until you either find a relevant endpoint or exhaust all options.
+
+Example approach:
+1) Check data["endpoints"] length by calling `json_spec_get_value(data["endpoints"])`.
+2) Start from index 0:
+   - Action: json_spec_get_value(data["endpoints"][0])
+   - If relevant, finalize. 
+   - If not relevant, go to index 1.
+3) Continue until you either find a match or get an IndexError, meaning no more endpoints exist.
+4) Finally, provide "Final Answer" with either the single relevant endpoint or “No relevant endpoint found.”
+"""
+
+JSON_PREFIX_WORKS = """You are an agent designed to interact with JSON stored in a variable called 'data'.
+
+Your goals:
 1. Carefully retrieve all endpoints from data["endpoints"].
 2. If the entire list is truncated or doesn't show all items in one go, enumerate them by index (0, 1, 2, ...) until a KeyError or similar indicates no more.
 3. Only after checking all endpoints do you decide whether an endpoint is relevant to the user's query.
