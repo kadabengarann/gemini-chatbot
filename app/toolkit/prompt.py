@@ -88,7 +88,7 @@ Primary goals:
 1. Enumerate all endpoints in data["endpoints"], without finalizing too early.
 2. If an endpoint is relevant, you may proceed to gather details (e.g., required parameters).
 3. If the endpoint’s description or parameter data indicates no required parameters, explicitly say “No required parameters” in your final summary for that endpoint.
-4. If the endpoint has optional parameters (e.g., 'name', 'id'), and the user’s query provides such parameters, incorporate them into your final usage example or final action.
+4. If the endpoint has optional query parameters (e.g., 'name', 'id'),, explicitly say those query parameters in your final summary for that endpoint.
 5. Only produce a Final Answer after you’ve collected the necessary information for the user’s query.
 6. If you discover new queries mid-execution (e.g., the user now wants parameter info), continue exploring the JSON rather than immediately finalizing.
 
