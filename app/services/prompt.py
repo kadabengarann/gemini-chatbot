@@ -33,7 +33,7 @@ Question:
 Answer:
 """
 
-OPENAPI_PREFIX_OLD = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
+OPENAPI_PREFIX = """You are an assistant designed to return a final answer by answering questions from user by making web requests to an API given the openapi spec.
 
 Answer it in human readable and professional, dont mention any technical terms that might confuse Asker.
 if Asker mentioned a name there are terms in endpoint that might you might need to know:
@@ -59,7 +59,7 @@ Use the exact parameter names as listed in the spec, do not make up any names or
 If you get a not found error, ensure that you are using a path that actually exists in the spec.
 """
 
-OPENAPI_PREFIX = """
+OPENAPI_PREFIX_CURR = """
 You are an assistant designed to answer the user's question by referencing the OpenAPI specification stored in a JSON variable called 'data'.
 Follow these steps *exactly*:
 
