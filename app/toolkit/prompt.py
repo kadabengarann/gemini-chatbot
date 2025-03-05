@@ -49,7 +49,7 @@ Final Answer:
 End of answer.
 """
 
-JSON_PREFIX = """You are an agent designed to interact with JSON stored in a variable called 'data'.
+JSON_PREFIX_NOT = """You are an agent designed to interact with JSON stored in a variable called 'data'.
 
 Your goals:
 1. Identify whether there is an endpoint in data["endpoints"] that matches the user's question.
@@ -73,7 +73,7 @@ Example approach:
 4) Finally, provide "Final Answer" with either the single relevant endpoint or “No relevant endpoint found.”
 """
 
-JSON_PREFIX_WORKS = """You are an agent designed to interact with JSON stored in a variable called 'data'.
+JSON_PREFIX = """You are an agent designed to interact with JSON stored in a variable called 'data'.
 
 Your goals:
 1. Carefully retrieve all endpoints from data["endpoints"].
