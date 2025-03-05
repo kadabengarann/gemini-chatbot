@@ -9,11 +9,11 @@ import os
 import pickle
 
 # Function to construct API authentication headers
-def construct_vms_api_auth_headers():
-    access_token = current_app.config.get('VMS_API_KEY')
+def construct_vms_api_auth_headers(access_token):
+    # access_token = current_app.config.get('VMS_API_KEY')
     return {"Authorization": f"Bearer {access_token}"}
 
-def get_api_toolkit(model): 
+def get_api_toolkit(model, access_token): 
     cache_file = "app/datasource/reduced_spec_cache.pkl"
     
     # Check if the reduced spec is cached
@@ -43,7 +43,7 @@ def get_api_toolkit(model):
     api_json_spec = JsonSpec(dict_=reduced_spec_dict)
     
     # Construct the OpenAPI toolkit
-    headers = construct_vms_api_auth_headers()
+    headers = construct_vms_api_auth_headers(access_token)
     vms_api_requests_wrapper = RequestsWrapper(headers=headers)
 
     return CustomOpenAPIToolkit.from_llm(

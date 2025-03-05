@@ -100,7 +100,7 @@ def generate_response(response, identifier, message_type=""):
     model = initialize_model()
     
     if _toolkit is None:
-        _toolkit = datasource.get_api_toolkit(model)
+        _toolkit = datasource.get_api_toolkit(model, identifier)
     if _toolkit is None:
         return "api_toolkit not initialized"
         
