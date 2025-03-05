@@ -11,7 +11,7 @@ import pickle
 # Function to construct API authentication headers
 def construct_vms_api_auth_headers(access_token):
     api_token = current_app.config.get('VMS_API_KEY')
-    return {"Authorization": f"Bearer {api_token}.{access_token}"}
+    return {"Authorization": f"Bearer {api_token}_{access_token}"}
 
 def get_api_toolkit(model, access_token): 
     cache_file = "app/datasource/reduced_spec_cache.pkl"
