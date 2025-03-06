@@ -114,7 +114,7 @@ def webhook_post():
 # New routes
 @webhook_blueprint.route('/', methods=['GET'])
 def hello():
-    check_facebook_api()
+    # check_facebook_api()
     return jsonify({"IsSuccess": True,
                     "ModelName": current_app.config['MODEL_NAME'],
                     "UsingGPT": current_app.config['IS_USING_GPT'],
