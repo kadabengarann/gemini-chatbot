@@ -11,7 +11,8 @@ def check_facebook_api():
     """Verify API accessibility for graph.facebook.com."""
     try:
         # 2️⃣ Try API Connection
-        response = requests.get(f"https://graph.facebook.com/{current_app.config['VERSION']}/me/{current_app.config['ACCESS_TOKEN']}", timeout=5)
+        # response = requests.get(f"https://graph.facebook.com/{current_app.config['VERSION']}/me/{current_app.config['ACCESS_TOKEN']}", timeout=5)
+        response = requests.get(f"https://graph.facebook.com/v19.0/me?access_token=EAAR7oZA4IQWcBO3Qu79gZALVhCXMckSQzqya3tntkpRilddd7HYVD9BxBn4SHZCLDhLa81ZB42GVnlcL6ZBLIotCNF0uKivHtrC4y1oKofYgZAXCfLXAcOjIFHLatDu5bfJnck9L0sLIhMuSRH8ZA7z2QqtMZCAWqobHirDGUDpy8RFmWFWemWWDdqZC9rmp1sCQ1rAZDZD", timeout=5)
         if response.status_code == 200:
             response_data = response.json()
             logging.info(f"✅ Facebook API Accessible: {response_data}")
