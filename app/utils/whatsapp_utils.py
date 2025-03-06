@@ -7,6 +7,22 @@ from ..utils.static import MessageType
 
 import re
 
+def check_facebook_api():
+    """Verify API accessibility for graph.facebook.com."""
+    try:
+        # 2️⃣ Try API Connection
+        response = requests.get(f"https://graph.facebook.com/{current_app.config['VERSION']}/me/{current_app.config['ACCESS_TOKEN']}", timeout=5)
+        if response.status_code == 200:
+            response_data = response.json()
+            logging.info(f"✅ Facebook API Accessible: {response_data}")
+        else:
+            logging.error(f"Facebook API returned status: {response.status_code}")
+            raise Exception("Facebook API is unreachable")
+
+    except requests.RequestException as e:
+        logging.error(f"Failed to connect to Facebook API: {e}")
+        raise Exception("Facebook API is not reachable")
+
 def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
     logging.info(f"Content-type: {response.headers.get('content-type')}")

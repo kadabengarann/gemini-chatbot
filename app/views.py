@@ -8,6 +8,7 @@ from .decorators.security import signature_required
 from .utils.whatsapp_utils import (
     process_whatsapp_message,
     is_valid_whatsapp_message,
+    check_facebook_api
 )
 from .services.model_service  import generate_response
 from .utils.static import MessageType
@@ -113,6 +114,7 @@ def webhook_post():
 # New routes
 @webhook_blueprint.route('/', methods=['GET'])
 def hello():
+    check_facebook_api()
     return jsonify({"IsSuccess": True,
                     "ModelName": current_app.config['MODEL_NAME'],
                     "UsingGPT": current_app.config['IS_USING_GPT'],
