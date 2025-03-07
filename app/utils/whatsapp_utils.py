@@ -34,6 +34,7 @@ def check_url_connection():
     try:
         # 2️⃣ Check VMS API Connection
         vms_url = current_app.config['API_URL']
+        logging.info(f"VMS API URL: {vms_url}")
         vms_response = requests.get(vms_url, timeout=5)
 
         if vms_response.status_code == 200:
