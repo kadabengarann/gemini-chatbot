@@ -8,7 +8,7 @@ from .decorators.security import signature_required
 from .utils.whatsapp_utils import (
     process_whatsapp_message,
     is_valid_whatsapp_message,
-    check_facebook_api
+    check_url_connection
 )
 from .services.model_service  import generate_response
 from .utils.static import MessageType
@@ -114,12 +114,16 @@ def webhook_post():
 # New routes
 @webhook_blueprint.route('/', methods=['GET'])
 def hello():
-    # check_facebook_api()
     return jsonify({"IsSuccess": True,
                     "ModelName": current_app.config['MODEL_NAME'],
                     "UsingGPT": current_app.config['IS_USING_GPT'],
                     })
     
+@webhook_blueprint.route("/check-connection", methods=["GET"])
+def check_connection():
+    result = check_url_connection()
+    return jsonify({"message": result})  # Return as JSON to be displayed on the frontend
+
 @webhook_blueprint.route('/start', methods=['GET'])
 def start_conversation():
     print("Starting a new conversation...")

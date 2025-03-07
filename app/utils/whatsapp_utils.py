@@ -7,22 +7,52 @@ from ..utils.static import MessageType
 
 import re
 
-def check_facebook_api():
-    """Verify API accessibility for graph.facebook.com."""
+def check_url_connection():
+    """Verify API accessibility for graph.facebook.com and VMS API, returning a string result."""
+    results = []  # Store messages for frontend display
+
     try:
-        # 2️⃣ Try API Connection
-        # response = requests.get(f"https://graph.facebook.com/{current_app.config['VERSION']}/me/{current_app.config['ACCESS_TOKEN']}", timeout=5)
-        response = requests.get(f"https://graph.facebook.com/v19.0/me?access_token=EAAR7oZA4IQWcBO3Qu79gZALVhCXMckSQzqya3tntkpRilddd7HYVD9BxBn4SHZCLDhLa81ZB42GVnlcL6ZBLIotCNF0uKivHtrC4y1oKofYgZAXCfLXAcOjIFHLatDu5bfJnck9L0sLIhMuSRH8ZA7z2QqtMZCAWqobHirDGUDpy8RFmWFWemWWDdqZC9rmp1sCQ1rAZDZD", timeout=5)
-        if response.status_code == 200:
-            response_data = response.json()
-            logging.info(f"✅ Facebook API Accessible: {response_data}")
+        # 1️⃣ Check Facebook API Connection
+        fb_url = f"https://graph.facebook.com/v19.0/me?access_token={current_app.config['ACCESS_TOKEN']}"
+        fb_response = requests.get(fb_url, timeout=5)
+
+        if fb_response.status_code == 200:
+            fb_data = fb_response.json()
+            fb_message = f"✅ Facebook API Accessible: {fb_data}"
+            results.append(fb_message)
+            logging.info(fb_message)
         else:
-            logging.error(f"Facebook API returned status: {response.status_code}")
-            raise Exception("Facebook API is unreachable")
+            fb_error = f"❌ Facebook API returned status: {fb_response.status_code}"
+            results.append(fb_error)
+            logging.error(fb_error)
 
     except requests.RequestException as e:
-        logging.error(f"Failed to connect to Facebook API: {e}")
-        raise Exception("Facebook API is not reachable")
+        fb_exception = f"❌ Failed to connect to Facebook API: {e}"
+        results.append(fb_exception)
+        logging.error(fb_exception)
+
+    try:
+        # 2️⃣ Check VMS API Connection
+        vms_url = current_app.config['API_URL']
+        vms_response = requests.get(vms_url, timeout=5)
+
+        if vms_response.status_code == 200:
+            vms_data = vms_response.json()
+            vms_message = f"✅ VMS API Accessible: {vms_data}"
+            results.append(vms_message)
+            logging.info(vms_message)
+        else:
+            vms_error = f"❌ VMS API returned status: {vms_response.status_code}"
+            results.append(vms_error)
+            logging.error(vms_error)
+
+    except requests.RequestException as e:
+        vms_exception = f"❌ Failed to connect to VMS API: {e}"
+        results.append(vms_exception)
+        logging.error(vms_exception)
+
+    return "\n".join(results)  
+
 
 def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
