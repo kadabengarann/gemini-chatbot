@@ -104,7 +104,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 ---
 
 ### **Step 6: Execute the API Request**  
-- Once the correct endpoint and query parameters are confirmed, make the request.  
+- Once the correct endpoint and query parameters are confirmed, make the request. make sure the Base URL is included in the request.
 
 - Ensure the correct **parameter name** is used exactly as defined in the spec.
 
