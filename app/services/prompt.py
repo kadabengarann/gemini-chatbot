@@ -76,6 +76,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - Retrieve all available API endpoints before making assumptions.  
 - Example:  
   Thought: I need to check the available endpoints.  
+  Action: json_explorer  
 
 ---
 
