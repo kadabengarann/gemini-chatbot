@@ -53,7 +53,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - Use the OpenAPI spec to retrieve the **base URL** from `data["servers"]`.  
 - Example:  
   Thought: I need to find the base URL.  
-  Action: json_spec_get_value  
+  Action: json_explorer  
   Action Input: data["servers"]
 
 ---
@@ -62,7 +62,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - Retrieve all available API endpoints before making assumptions.  
 - Example:  
   Thought: I need to check the available endpoints.  
-  Action: json_spec_get_value  
+  Action: json_explorer  
   Action Input: data["endpoints"]
 
 ---
@@ -71,7 +71,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - Check if there is an endpoint that uses **query parameters** to fetch resident location.  
 - Example:  
   Thought: I need to find an endpoint related to residents that uses query parameters.  
-  Action: json_spec_list_keys  
+  Action: json_explorer  
   Action Input: data["endpoints"]
 
 - If no relevant endpoint is found, respond with:  
@@ -85,7 +85,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - Instead of assuming a path parameter, check if the API uses **query parameters** (`/residents?id=123`).  
 - Example:  
   Thought: I need to check what query parameters are required for the `/residents` endpoint.  
-  Action: json_spec_get_value  
+  Action: json_explorer  
   Action Input: data["endpoints"]["/residents"]["parameters"]
 
 - If `id` is required, ensure it is included in the request.
