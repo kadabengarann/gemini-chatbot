@@ -82,7 +82,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 ---
 
 ### **Step 5: Retrieve Required Query Parameters**  
-- Instead of assuming a path parameter (`/residents/{id}`), check if the API uses **query parameters** (`/residents?id=123`).  
+- Instead of assuming a path parameter (`/residents/\{id\}`), check if the API uses **query parameters** (`/residents?id=123`).  
 - Example:  
   Thought: I need to check what query parameters are required for the `/residents` endpoint.  
   Action: json_spec_get_value  
@@ -95,7 +95,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 ### **Step 6: Execute the API Request**  
 - Once the correct endpoint and query parameters are confirmed, make the request.  
 - Example request:  
-  GET {base_url}/residents?id=123
+  GET \{base_url\}/residents?id=123
 - Ensure the correct **parameter name** is used exactly as defined in the spec.
 
 ---
@@ -104,7 +104,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - If data is successfully retrieved, format it professionally.  
 - Ensure answers are **clear and easy to understand** without exposing unnecessary technical details.  
 - Example response:
-  "The resident's location is Building A, Floor 2, Room 123."
+  The resident's location is Building A, Floor 2, Room 123.
 """
 
 OPENAPI_PREFIX_CURR = """
