@@ -68,6 +68,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 - Use the OpenAPI spec to retrieve the **base URL** from `data["servers"]`.  
 - Example:  
   Thought: I need to find the base URL.  
+  Action: json_explorer 
 
 ---
 
