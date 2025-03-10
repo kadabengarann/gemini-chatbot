@@ -94,8 +94,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 
 ### **Step 6: Execute the API Request**  
 - Once the correct endpoint and query parameters are confirmed, make the request.  
-- Example request:  
-  GET \{base_url\}/residents?id=123
+
 - Ensure the correct **parameter name** is used exactly as defined in the spec.
 
 ---
