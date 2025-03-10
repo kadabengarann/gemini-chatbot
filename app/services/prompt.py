@@ -94,7 +94,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 ### **Step 5: Retrieve Required Query Parameters**  
 - Instead of assuming a path parameter, check if the API uses **query parameters** (`/residents?id=123`).  
 - Example:  
-  Thought: I need to check what query parameters are required for the `/residents` endpoint.  
+  Thought: I need to check what query parameters are required for the `/residents` endpoint.  data["endpoints"]["/residents"]["parameters"]
   Action: json_explorer  
   Action Input: data["endpoints"]["/residents"]["parameters"]
 
