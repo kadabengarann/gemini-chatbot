@@ -133,7 +133,7 @@ paths:
     get:
       summary: Check Visitor Availability
       description: |
-        Retrieve the availability status of a visitor based on optional query parameters such as name and ID. With no required parameter.
+        Retrieve the availability status of a visitor based on at least one of: name or ID.
         The response includes the resident they are visiting, the assigned timeslot, and any remarks about their visit.
       operationId: VisitorAvailability
       tags:
