@@ -22,7 +22,7 @@ stuff_chain = None
 vector_index = None
 IS_USING_DB = None
 IS_USING_API = None
-API_URL = None
+DATA_API_URL = None
 _datasource = None
 
 def get_datasource():
@@ -47,16 +47,16 @@ def initialize_model():
 def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_name): 
     """Initialize and return the API agent."""
 
-    global API_URL
-    if API_URL is None:
-        API_URL = current_app.config.get('API_URL')
-        if not API_URL:
+    global DATA_API_URL
+    if DATA_API_URL is None:
+        DATA_API_URL = current_app.config.get('DATA_API_URL')
+        if not DATA_API_URL:
             raise ValueError("API_URL environment variable not set")
     raw_prefix_template = prompt.OPENAPI_PREFIX
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
-        prefix=raw_prefix_template.format(api_base_url=API_URL),
+        prefix=raw_prefix_template.format(api_base_url=DATA_API_URL),
         suffix=prompt.OPENAPI_SUFFIX,
         format_instructions=prompt.FORMAT_INSTRUCTIONS,
         allow_dangerous_requests=True,
