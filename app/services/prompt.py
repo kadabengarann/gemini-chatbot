@@ -67,18 +67,10 @@ The base API URL is:
 
 ---
 
-### **Step 2: List Available Endpoints**  
-- Find all available API endpoints before making assumptions.  
-- Example:  
-  Thought: I need to check the available endpoints.  
-  Action: json_explorer  
-
----
-
-### **Step 3: Identify the Correct Query Parameter Endpoint**  
+### **Step 2: Identify the Correct Endpoint and Query Parameter**  
 - Check if there is an endpoint that uses **query parameters** to fetch from endpoint.  
 - Example:  
-  Thought: I need to find an endpoint related to question that uses query parameters.  
+  Thought: I need to find an endpoint related to question with query parameters.  
 
 - If no relevant endpoint is found, respond with:  
   Thought: No relevant endpoint found in the API.  
@@ -87,25 +79,14 @@ The base API URL is:
 
 ---
 
-### **Step 4: Retrieve Required Query Parameters**  
-- Instead of assuming a path parameter, check if the API uses **query parameters** (`/residents?id=123`).  
-- Example:  
-  Thought: I need to check what query parameters are required for the `/residents` endpoint.  data["endpoints"]["/residents"]["parameters"]
-  Action: json_explorer  
-  Action Input: data["endpoints"]["/residents"]["parameters"]
-
-- If `id` is required, ensure it is included in the request.
-
----
-
-### **Step 5: Execute the API Request**  
+### **Step 3: Execute the API Request**  
 - Once the correct endpoint and query parameters are confirmed, make the request. make sure the Base URL is included in the request.
 
 - Ensure the correct **parameter name** is used exactly as defined in the spec.
 
 ---
 
-### **Step 6: Return the Final Answer**  
+### **Step 4: Return the Final Answer**  
 - If data is successfully retrieved and the response can be finalized, you must always complete the chain with:
 
   Thought: I now know the final answer.  
