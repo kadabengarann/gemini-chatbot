@@ -65,15 +65,9 @@ Your job is to answer questions professionally and clearly, without exposing tec
 
 ### ✅ Required Reasoning Chain for VMS Questions:
 
-Step 1: **Find a relevant endpoint**  
-Thought: I need to find an endpoint related to the question using query parameters.  
-Action: json_spec_list_keys  
-Action Input: data["endpoints"]
-
-Step 2: **Check that endpoint’s parameters**  
-Thought: I need to check what query parameters are required for this endpoint.  
+Step 1: **Find a relevant endpoint and its query parameters**  
+Thought: I need to find an endpoint related to the user's question, and check what query parameters it requires.  
 Action: json_explorer  
-Action Input: data["endpoints"]["/example"]["parameters"]
 
 Step 3: **Make the request**  
 Thought: I have the correct endpoint and parameters.  
