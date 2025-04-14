@@ -106,10 +106,13 @@ The base API URL is:
 ---
 
 ### **Step 6: Return the Final Answer**  
-- If data is successfully retrieved, format it professionally.  
-- Ensure answers are **clear and easy to understand** without exposing unnecessary technical details.  
-- Example response:
-  The resident's location is Building A, Floor 2, Room 123.
+- If data is successfully retrieved and the response can be finalized, you must always complete the chain with:
+
+  Thought: I now know the final answer.  
+  Final Answer: <your response in natural language>
+
+- Do NOT end with a human-readable explanation under "Thought:" only.
+- Avoid continuing the chain or returning additional `Action:` if you have enough information.
 """
 
 OPENAPI_PREFIX_CURR = """
