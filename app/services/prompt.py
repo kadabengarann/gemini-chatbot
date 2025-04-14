@@ -64,8 +64,8 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 
 ---
 
-### **Step 2: Retrieve the Base URL**  
-- Use the OpenAPI spec to retrieve the **base URL** from `data["servers"]`.  
+### **Step 2: Find the base Base URL**  
+- Use the OpenAPI spec to find the **base URL** from `data["servers"]`.  
 - Example:  
   Thought: I need to find the base URL.  
   Action: json_explorer 
@@ -73,7 +73,7 @@ OPENAPI_PREFIX = """You are an assistant specifically designed to support the Vi
 ---
 
 ### **Step 3: List Available Endpoints**  
-- Retrieve all available API endpoints before making assumptions.  
+- Find all available API endpoints before making assumptions.  
 - Example:  
   Thought: I need to check the available endpoints.  
   Action: json_explorer  
