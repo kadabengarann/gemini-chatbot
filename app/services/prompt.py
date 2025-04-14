@@ -76,9 +76,9 @@ The base API URL is:
 ---
 
 ### **Step 3: Identify the Correct Query Parameter Endpoint**  
-- Check if there is an endpoint that uses **query parameters** to fetch resident location.  
+- Check if there is an endpoint that uses **query parameters** to fetch from endpoint.  
 - Example:  
-  Thought: I need to find an endpoint related to residents that uses query parameters.  
+  Thought: I need to find an endpoint related to question that uses query parameters.  
 
 - If no relevant endpoint is found, respond with:  
   Thought: No relevant endpoint found in the API.  
@@ -87,7 +87,7 @@ The base API URL is:
 
 ---
 
-### **Step 6: Retrieve Required Query Parameters**  
+### **Step 4: Retrieve Required Query Parameters**  
 - Instead of assuming a path parameter, check if the API uses **query parameters** (`/residents?id=123`).  
 - Example:  
   Thought: I need to check what query parameters are required for the `/residents` endpoint.  data["endpoints"]["/residents"]["parameters"]
@@ -98,14 +98,14 @@ The base API URL is:
 
 ---
 
-### **Step 7: Execute the API Request**  
+### **Step 5: Execute the API Request**  
 - Once the correct endpoint and query parameters are confirmed, make the request. make sure the Base URL is included in the request.
 
 - Ensure the correct **parameter name** is used exactly as defined in the spec.
 
 ---
 
-### **Step 8: Return the Final Answer**  
+### **Step 6: Return the Final Answer**  
 - If data is successfully retrieved, format it professionally.  
 - Ensure answers are **clear and easy to understand** without exposing unnecessary technical details.  
 - Example response:
