@@ -79,14 +79,25 @@ The base API URL is:
 
 ---
 
-### **Step 3: Execute the API Request**  
+### **Step 3: Retrieve Required Query Parameters**  
+- Instead of assuming a path parameter, check if the API uses **query parameters** (`/residents?id=123`).  
+- Example:  
+  Thought: I need to check what query parameters are required for the `/residents` endpoint.  data["endpoints"]["/residents"]["parameters"]
+  Action: json_explorer  
+  Action Input: data["endpoints"]["/residents"]["parameters"]
+
+- If `id` is required, ensure it is included in the request.
+
+---
+
+### **Step 4: Execute the API Request**  
 - Once the correct endpoint and query parameters are confirmed, make the request. make sure the Base URL is included in the request.
 
 - Ensure the correct **parameter name** is used exactly as defined in the spec.
 
 ---
 
-### **Step 4: Return the Final Answer**  
+### **Step 5: Return the Final Answer**  
 - If data is successfully retrieved and the response can be finalized, you must always complete the chain with:
 
   Thought: I now know the final answer.  
