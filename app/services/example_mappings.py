@@ -1,10 +1,10 @@
 example_endpoint_mappings = {
-    "resident details by name": {
+    "resident information by name": {
         "endpoint": "/residents",
         "method": "GET",
         "parameters": ["name"]
     },
-    "resident details by id": {
+    "resident information by id": {
         "endpoint": "/residents",
         "method": "GET",
         "parameters": ["id"]
@@ -24,7 +24,7 @@ example_endpoint_mappings = {
         "method": "GET",
         "parameters": ["visitorId"]
     },
-    "validate visitor access to resident": {
+    "validate visitor visit access to resident": {
         "endpoint": "/visitor-availability",
         "method": "GET",
         "parameters": ["name"]
