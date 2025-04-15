@@ -55,18 +55,20 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
         DATA_API_URL = current_app.config.get('DATA_API_URL')
         if not DATA_API_URL:
             raise ValueError("API_URL environment variable not set")
+    mappings_json = json.dumps(example_mappings.example_endpoint_mappings, indent=2)
+    mappings_formatted = textwrap.indent(mappings_json, "    ")
+
     raw_prefix_template = prompt.OPENAPI_PREFIX
-    example_mappings_section = textwrap.indent(
-    json.dumps(example_mappings.example_endpoint_mappings, indent=2), prefix="    "
-)
-    print(f"Example Mappings Section: {example_mappings_section}")  # Debugging line
+
+    full_prompt = raw_prefix_template.format(
+        api_base_url=DATA_API_URL,
+        example_mappings_section=mappings_formatted
+    )
+    print(f"Full PREFIX: {full_prompt}")  # Debugging line
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
-        prefix=raw_prefix_template.format(
-            api_base_url=DATA_API_URL,
-            example_mappings_section=example_mappings_section
-            ),
+        prefix=full_prompt,
         suffix=prompt.OPENAPI_SUFFIX,
         format_instructions=prompt.FORMAT_INSTRUCTIONS,
         allow_dangerous_requests=True,
