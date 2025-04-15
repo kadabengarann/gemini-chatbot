@@ -14,6 +14,9 @@ def construct_vms_api_auth_headers(access_token):
     return {"Authorization": f"Bearer {api_token}_{access_token}"}
 
 def get_api_toolkit(model, access_token): 
+    print("Initializing API toolkit...")
+    print(f"Access token: {access_token}")
+
     cache_file = "app/datasource/reduced_spec_cache.pkl"
     
     # Check if the reduced spec is cached
