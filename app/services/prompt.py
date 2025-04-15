@@ -52,6 +52,13 @@ You may use the following mappings as a shortcut to avoid exploring the full Ope
 Always validate parameter names and use exact names when making the request.  
 If no suitable match is found in the mappings, fall back to exploring `data["endpoints"]` and their parameters.
 
+When you have all the required data, always finish with:
+
+Thought: I now know the final answer.  
+Final Answer: <your response>
+
+⚠️ Never end on `Thought:` alone  
+⚠️ Never return another `Action:` after the final answer
 ---
 
 ### 🔍 Question Type Handling
