@@ -108,7 +108,7 @@ Step 3: **Return the Final Answer**
 If you have all the required data, close with:
 
 Thought: I now know the final answer.  
-Final Answer: Present all relevant information in a clear and concise format. Then close politely.
+Final Answer: <your professional response based on the data retrieved>
 
 Do NOT end on a Thought alone.  
 Never add another Action after you already have the final data.
