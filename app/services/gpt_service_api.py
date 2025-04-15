@@ -28,6 +28,14 @@ IS_USING_API = None
 DATA_API_URL = None
 _datasource = None
 
+def format_mappings_human_readable(mappings: dict) -> str:
+    lines = []
+    for topic, meta in mappings.items():
+        params = ", ".join(f"`{p}`" for p in meta["parameters"])
+        plural = "parameters" if len(meta["parameters"]) > 1 else "parameter"
+        lines.append(f"- **{topic}** → `{meta['endpoint']}` with {plural} {params}")
+    return "\n".join(lines)
+
 def get_datasource():
     """Return the appropriate datasource based on the current configuration."""
     global _datasource, IS_USING_API
@@ -55,14 +63,15 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
         DATA_API_URL = current_app.config.get('DATA_API_URL')
         if not DATA_API_URL:
             raise ValueError("API_URL environment variable not set")
-    mappings_json = json.dumps(example_mappings.example_endpoint_mappings, indent=2)
-    mappings_formatted = textwrap.indent(mappings_json, "    ")
+    example_mappings_section = format_mappings_human_readable(example_mappings.example_endpoint_mappings)
+    # mappings_json = json.dumps(example_mappings.example_endpoint_mappings, indent=2)
+    # mappings_formatted = textwrap.indent(mappings_json, "    ")
 
     raw_prefix_template = prompt.OPENAPI_PREFIX
 
     full_prompt = raw_prefix_template.format(
         api_base_url=DATA_API_URL,
-        example_mappings_section=mappings_formatted
+        example_mappings_section=example_mappings_section
     )
     print(f"Full PREFIX: {full_prompt}")  # Debugging line
     return create_openapi_agent(
