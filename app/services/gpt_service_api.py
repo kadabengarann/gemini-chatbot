@@ -12,6 +12,7 @@ from langchain_community.agent_toolkits import create_openapi_agent
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.memory import ChatMessageHistory
 import json
+import textwrap
 from ..services import example_mappings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -55,7 +56,10 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
         if not DATA_API_URL:
             raise ValueError("API_URL environment variable not set")
     raw_prefix_template = prompt.OPENAPI_PREFIX
-    example_mappings_section = json.dumps(example_mappings.example_endpoint_mappings, indent=2)
+    example_mappings_section = textwrap.indent(
+    json.dumps(example_mappings.example_endpoint_mappings, indent=2), prefix="    "
+)
+
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
