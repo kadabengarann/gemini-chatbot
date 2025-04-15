@@ -178,5 +178,4 @@ Relevant pieces of previous conversation:
 (You do not need to use these pieces of information if not relevant)
 
 Question: {input}
-Thought: I should first verify if this is a general or VMS-related query.
 {agent_scratchpad}"""
