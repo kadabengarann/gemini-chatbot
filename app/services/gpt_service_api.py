@@ -59,7 +59,7 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
     example_mappings_section = textwrap.indent(
     json.dumps(example_mappings.example_endpoint_mappings, indent=2), prefix="    "
 )
-
+    print(f"Example Mappings Section: {example_mappings_section}")  # Debugging line
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
