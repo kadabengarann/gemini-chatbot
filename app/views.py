@@ -37,6 +37,7 @@ def handle_message():
     body = request.get_json()
     app_context = current_app.app_context()
     
+    print("Received body:", body)  # Debugging line
     # Check if it's a WhatsApp status update
     if (
         body.get("entry", [{}])[0]
