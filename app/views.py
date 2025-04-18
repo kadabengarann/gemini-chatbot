@@ -82,6 +82,8 @@ def handle_message():
 # Required webhook verifictaion for WhatsApp
 def verify():
     # Parse params from the webhook verification request
+    print("Received verification request")
+    print("Request args:", request.args)  # Debugging line
     mode = request.args.get("hub.mode")
     token = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
