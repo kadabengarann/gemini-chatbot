@@ -160,6 +160,69 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VisitorAvailabilityResponse"
+  /visitations-daily-count:
+    get:
+      summary: Get the number of valid visitations for a specific date
+      description: |
+        Returns the number of valid visitations for the given date.
+        If `isCheckedIn=true`, only visits with a check-in timestamp are counted.
+        If `isCheckedIn=false` or not provided, all valid visitations are counted., and any remarks about their visit.
+      operationId: VisitationsDailyCount
+      tags:
+        - VMS_API
+      parameters:
+        - name: date
+          in: query
+          required: false
+          description: The date to retrieve (YYYY-MM-DD). Defaults to today.
+          schema:
+            type: string
+            format: date
+        - name: isCheckedIn
+          in: query
+          required: false
+          description: Set to true to count only visits that have been checked in.
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Visit count result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitationsDailyCountResponse"
+  /visitations-average-count:
+    get:
+      summary: Get the average number of valid visitations over a date range
+      description: |
+        Returns the average daily count of valid visitations for a specified date range.
+        If no dates are provided, the default range is the past 7 days ending today.
+      operationId: VisitationsAverageCount
+      tags:
+        - VMS_API
+      parameters:
+        - name: startDate
+          in: query
+          required: false
+          description: Start of the date range (YYYY-MM-DD). Defaults to 7 days ago.
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          description: End of the date range (YYYY-MM-DD). Defaults to today.
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Average daily visitation count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitationsAverageCountResponse"
+    
 components:
   securitySchemes:
     bearerAuth:
@@ -220,6 +283,37 @@ components:
             Remarks:
               type: string
               example: "Denied by Outside Access Time."
+    VisitationsDailyCountResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: The date for which data was calculated
+        value:
+          type: integer
+          description: Total count of visitations on this date
+    VisitationsAverageCountResponse:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: Beginning of the analysis period
+        endDate:
+          type: string
+          format: date
+          description: End of the analysis period
+        total:
+          type: integer
+          description: Total valid visitations during the period
+        days:
+          type: integer
+          description: Number of days analyzed
+        value:
+          type: number
+          format: float
+          description: Average valid visitations per day
     Resident_Object:
       type: object
       properties:

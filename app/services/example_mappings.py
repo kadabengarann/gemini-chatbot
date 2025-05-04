@@ -33,5 +33,20 @@ example_endpoint_mappings = {
         "endpoint": "/visitations",
         "method": "GET",
         "parameters": ["residentId", "date"]
+    },
+    "visitations count by date": {
+        "endpoint": "/visitations-daily-count",
+        "method": "GET",
+        "parameters": ["date"]
+    },
+    "checked-in visitations count by date": {
+        "endpoint": "/visitations-daily-count",
+        "method": "GET",
+        "parameters": ["date", "isCheckedIn"]
+    },
+    "average visitation count over range": {
+        "endpoint": "/visitations-average-count",
+        "method": "GET",
+        "parameters": ["startDate", "endDate"]
     }
 }
