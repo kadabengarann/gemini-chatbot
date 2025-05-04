@@ -10,7 +10,7 @@ import pickle
 
 class CleanRequestsWrapper(RequestsWrapper):
     def get(self, url: str, **kwargs) -> str:
-        url = url.strip().replace('\n', '')  # 🧼 Clean newline and trailing spaces
+        url = url.strip().replace('\n', '')
         return super().get(url, **kwargs)
 
     def post(self, url: str, data: dict = None, json: dict = None, **kwargs) -> str:
