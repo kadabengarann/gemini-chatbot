@@ -8,6 +8,16 @@ from ..toolkit.custom_openapi_toolkit import CustomOpenAPIToolkit
 import os
 import pickle
 
+class CleanRequestsWrapper(RequestsWrapper):
+    def get(self, url: str, **kwargs) -> str:
+        url = url.strip().replace('\n', '')  # 🧼 Clean newline and trailing spaces
+        return super().get(url, **kwargs)
+
+    def post(self, url: str, data: dict = None, json: dict = None, **kwargs) -> str:
+        url = url.strip().replace('\n', '')
+        return super().post(url, data=data, json=json, **kwargs)
+
+
 # Function to construct API authentication headers
 def construct_vms_api_auth_headers(access_token):
     api_token = current_app.config.get('VMS_API_KEY')
@@ -47,7 +57,7 @@ def get_api_toolkit(model, access_token):
     
     # Construct the OpenAPI toolkit
     headers = construct_vms_api_auth_headers(access_token)
-    vms_api_requests_wrapper = RequestsWrapper(headers=headers)
+    vms_api_requests_wrapper = CleanRequestsWrapper(headers=headers)
 
     return CustomOpenAPIToolkit.from_llm(
         llm=model, 
