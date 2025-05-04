@@ -146,7 +146,7 @@ def generate_response(response, identifier, message_type=""):
     if agent is None:
         return "Agent not initialized"
     input_dict = {
-        "input": response,
+        "input": response.strip(),
         "user_name": username,
         "current_date": current_date,
         "current_day": current_day
