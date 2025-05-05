@@ -64,5 +64,10 @@ example_endpoint_mappings = {
         "endpoint": "/visitations-average-count",
         "method": "GET",
         "parameters": ["startDate", "endDate"]
+    },
+    "visitations peak time summary": {
+        "endpoint": "/visitations-peak-times",
+        "method": "GET",
+        "parameters": ["startDate", "endDate"]
     }
 }
