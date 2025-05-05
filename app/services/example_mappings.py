@@ -69,5 +69,25 @@ example_endpoint_mappings = {
         "endpoint": "/visitations-time-distribution",
         "method": "GET",
         "parameters": ["startDate", "endDate"]
-    }
+    },
+    "visitations information by date": {
+        "endpoint": "/visitations",
+        "method": "GET",
+        "parameters": ["date"]
+    },
+    "visitations information by range": {
+        "endpoint": "/visitations",
+        "method": "GET",
+        "parameters": ["startDate", "endDate"]
+    },
+    "checked-in visitations on specific date": {
+        "endpoint": "/visitations",
+        "method": "GET",
+        "parameters": ["date", "isCheckedIn"]
+    },
+    "checked-in visitations by range": {
+        "endpoint": "/visitations",
+        "method": "GET",
+        "parameters": ["startDate", "endDate", "isCheckedIn"]
+    },
 }
