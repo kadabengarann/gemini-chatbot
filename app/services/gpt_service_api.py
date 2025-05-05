@@ -77,7 +77,7 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
         api_base_url=DATA_API_URL,
         example_mappings_section=example_mappings_section
     )
-    print(f"Full PREFIX: {full_prompt}")  # Debugging line
+    # print(f"Full PREFIX: {full_prompt}")  # Debugging line
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
