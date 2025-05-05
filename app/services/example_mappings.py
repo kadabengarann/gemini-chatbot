@@ -90,4 +90,30 @@ example_endpoint_mappings = {
         "method": "GET",
         "parameters": ["startDate", "endDate", "isCheckedIn"]
     },
+    "monthly visitation summary for a year": {
+        "endpoint": "/visitations-monthly-summary",
+        "method": "GET",
+        "parameters": ["year"],
+        "example_values": {
+            "year": "2025"
+        }
+    },
+    "monthly visitation summary for specific months": {
+        "endpoint": "/visitations-monthly-summary",
+        "method": "GET",
+        "parameters": ["months", "year"],
+        "example_values": {
+            "months": "11,12,1,2",
+            "year": "2025"
+        }
+    },
+    "monthly visitation summary in a month": {
+        "endpoint": "/visitations-monthly-summary",
+        "method": "GET",
+        "parameters": ["months", "year"],
+        "example_values": {
+            "months": "4",
+            "year": "2025"
+        }
+    }
 }

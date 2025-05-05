@@ -33,7 +33,11 @@ def format_mappings_human_readable(mappings: dict) -> str:
     for topic, meta in mappings.items():
         params = ", ".join(f"`{p}`" for p in meta["parameters"])
         plural = "parameters" if len(meta["parameters"]) > 1 else "parameter"
-        lines.append(f"- **{topic}** → `{meta['endpoint']}` with {plural} {params}")
+        line = f"- **{topic}** → `{meta['endpoint']}` with {plural} {params}"
+        if "example_values" in meta:
+            examples = ", ".join(f"`{k}={v}`" for k, v in meta["example_values"].items())
+            line += f" _(e.g. {examples})_"
+        lines.append(line)
     return "\n".join(lines)
 
 def get_datasource():
@@ -73,7 +77,7 @@ def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_nam
         api_base_url=DATA_API_URL,
         example_mappings_section=example_mappings_section
     )
-    # print(f"Full PREFIX: {full_prompt}")  # Debugging line
+    print(f"Full PREFIX: {full_prompt}")  # Debugging line
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
