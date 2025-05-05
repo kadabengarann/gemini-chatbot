@@ -160,14 +160,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VisitorAvailabilityResponse"
-  /visitations-daily-count:
+  /visitations-count:
     get:
-      summary: Get the number of valid visitations for a specific date
+      summary: Get the number of valid visitations for a specific date or range
       description: |
-        Returns the number of valid visitations for the given date.
-        If `isCheckedIn=true`, only visits with a check-in timestamp are counted.
-        If `isCheckedIn=false` or not provided, all valid visitations are counted., and any remarks about their visit.
-      operationId: VisitationsDailyCount
+        Returns the number of valid visitations either for a specific day (`date`) or a total count over a date range (`startDate` and `endDate`).
+        Use `isCheckedIn=true` to count only visits that were checked in. If no date parameters are provided, today's total will be returned by default.
+      operationId: VisitationsCount
       tags:
         - VMS_API
       parameters:
@@ -175,6 +174,20 @@ paths:
           in: query
           required: false
           description: The date to retrieve (YYYY-MM-DD). Defaults to today.
+          schema:
+            type: string
+            format: date
+        - name: startDate
+          in: query
+          required: false
+          description: Start of the date range (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          description: End of the date range (YYYY-MM-DD)
           schema:
             type: string
             format: date
@@ -190,7 +203,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/VisitationsDailyCountResponse"
+                oneOf:
+                  - $ref: "#/components/schemas/VisitationsCountDailyResponse"
+                  - $ref: "#/components/schemas/VisitationsCountRangeResponse"
   /visitations-average-count:
     get:
       summary: Get the average number of valid visitations over a date range
@@ -283,16 +298,30 @@ components:
             Remarks:
               type: string
               example: "Denied by Outside Access Time."
-    VisitationsDailyCountResponse:
+    VisitationsCountDailyResponse:
       type: object
       properties:
         date:
           type: string
           format: date
-          description: The date for which data was calculated
-        value:
-          type: integer
-          description: Total count of visitations on this date
+          description: Specific date for which visit count is returned
+        isCheckedIn:
+          type: boolean
+        count:
+          type: string
+          description: Total count of visitations for the day
+    VisitationsCountRangeResponse:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        count:
+          type: string
+          description: Total count of visitations in the range
     VisitationsAverageCountResponse:
       type: object
       properties:
