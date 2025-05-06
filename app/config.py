@@ -18,6 +18,7 @@ def load_configurations(app):
     app.config["MODEL_NAME"] = os.getenv('MODEL_NAME', os.environ.get('MODEL_NAME'))
     app.config["DB_URI"] = os.getenv('DB_URI', os.environ.get('DB_URI'))
     app.config["API_URL"] = os.getenv('API_URL', os.environ.get('API_URL'))
+    app.config["DATA_API_URL"] = os.getenv('DATA_API_URL', os.environ.get('DATA_API_URL'))
     app.config["VMS_API_KEY"] = os.getenv('VMS_API_KEY', os.environ.get('VMS_API_KEY'))
     app.config["IS_USING_DB"] = os.environ.get('IS_USING_DB', 'True').lower() == 'true'
     app.config["IS_USING_GPT"] = os.environ.get('IS_USING_GPT', 'True').lower() == 'true'

@@ -11,6 +11,9 @@ from langchain.vectorstores import Chroma
 from langchain_community.agent_toolkits import create_openapi_agent
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.memory import ChatMessageHistory
+import json
+import textwrap
+from ..services import example_mappings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -22,7 +25,20 @@ stuff_chain = None
 vector_index = None
 IS_USING_DB = None
 IS_USING_API = None
+DATA_API_URL = None
 _datasource = None
+
+def format_mappings_human_readable(mappings: dict) -> str:
+    lines = []
+    for topic, meta in mappings.items():
+        params = ", ".join(f"`{p}`" for p in meta["parameters"])
+        plural = "parameters" if len(meta["parameters"]) > 1 else "parameter"
+        line = f"- **{topic}** → `{meta['endpoint']}` with {plural} {params}"
+        if "example_values" in meta:
+            examples = ", ".join(f"`{k}={v}`" for k, v in meta["example_values"].items())
+            line += f" _(e.g. {examples})_"
+        lines.append(line)
+    return "\n".join(lines)
 
 def get_datasource():
     """Return the appropriate datasource based on the current configuration."""
@@ -46,10 +62,26 @@ def initialize_model():
 def initialize_api_agent(model, openapi_toolkit, conversational_memory, user_name): 
     """Initialize and return the API agent."""
 
+    global DATA_API_URL
+    if DATA_API_URL is None:
+        DATA_API_URL = current_app.config.get('DATA_API_URL')
+        if not DATA_API_URL:
+            raise ValueError("API_URL environment variable not set")
+    example_mappings_section = format_mappings_human_readable(example_mappings.example_endpoint_mappings)
+    # mappings_json = json.dumps(example_mappings.example_endpoint_mappings, indent=2)
+    # mappings_formatted = textwrap.indent(mappings_json, "    ")
+
+    raw_prefix_template = prompt.OPENAPI_PREFIX
+
+    full_prompt = raw_prefix_template.format(
+        api_base_url=DATA_API_URL,
+        example_mappings_section=example_mappings_section
+    )
+    # print(f"Full PREFIX: {full_prompt}")  # Debugging line
     return create_openapi_agent(
         llm=model,
         toolkit=openapi_toolkit,
-        prefix=prompt.OPENAPI_PREFIX,
+        prefix=full_prompt,
         suffix=prompt.OPENAPI_SUFFIX,
         format_instructions=prompt.FORMAT_INSTRUCTIONS,
         allow_dangerous_requests=True,
@@ -118,7 +150,7 @@ def generate_response(response, identifier, message_type=""):
     if agent is None:
         return "Agent not initialized"
     input_dict = {
-        "input": response,
+        "input": response.strip(),
         "user_name": username,
         "current_date": current_date,
         "current_day": current_day

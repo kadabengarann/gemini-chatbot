@@ -133,7 +133,7 @@ paths:
     get:
       summary: Check Visitor Availability
       description: |
-        Retrieve the availability status of a visitor based on optional query parameters such as name and ID. With no required parameter.
+        Retrieve the availability status of a visitor based on at least one of the visitor's name or ID.
         The response includes the resident they are visiting, the assigned timeslot, and any remarks about their visit.
       operationId: VisitorAvailability
       tags:
@@ -160,6 +160,84 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VisitorAvailabilityResponse"
+  /visitations-count:
+    get:
+      summary: Get the number of valid visitations for a specific date or range
+      description: |
+        Returns the number of valid visitations either for a specific day (`date`) or a total count over a date range (`startDate` and `endDate`).
+        Use `isCheckedIn=true` to count only visits that were checked in. If no date parameters are provided, today's total will be returned by default.
+      operationId: VisitationsCount
+      tags:
+        - VMS_API
+      parameters:
+        - name: date
+          in: query
+          required: false
+          description: The date to retrieve (YYYY-MM-DD). Defaults to today.
+          schema:
+            type: string
+            format: date
+        - name: startDate
+          in: query
+          required: false
+          description: Start of the date range (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          description: End of the date range (YYYY-MM-DD)
+          schema:
+            type: string
+            format: date
+        - name: isCheckedIn
+          in: query
+          required: false
+          description: Set to true to count only visits that have been checked in.
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Visit count result
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/VisitationsCountDailyResponse"
+                  - $ref: "#/components/schemas/VisitationsCountRangeResponse"
+  /visitations-average-count:
+    get:
+      summary: Get the average number of valid visitations over a date range
+      description: |
+        Returns the average daily count of valid visitations for a specified date range.
+        If no dates are provided, the default range is the past 7 days ending today.
+      operationId: VisitationsAverageCount
+      tags:
+        - VMS_API
+      parameters:
+        - name: startDate
+          in: query
+          required: false
+          description: Start of the date range (YYYY-MM-DD). Defaults to 7 days ago.
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          description: End of the date range (YYYY-MM-DD). Defaults to today.
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Average daily visitation count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisitationsAverageCountResponse"
+    
 components:
   securitySchemes:
     bearerAuth:
@@ -220,6 +298,51 @@ components:
             Remarks:
               type: string
               example: "Denied by Outside Access Time."
+    VisitationsCountDailyResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Specific date for which visit count is returned
+        isCheckedIn:
+          type: boolean
+        count:
+          type: string
+          description: Total count of visitations for the day
+    VisitationsCountRangeResponse:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        count:
+          type: string
+          description: Total count of visitations in the range
+    VisitationsAverageCountResponse:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: Beginning of the analysis period
+        endDate:
+          type: string
+          format: date
+          description: End of the analysis period
+        total:
+          type: integer
+          description: Total valid visitations during the period
+        days:
+          type: integer
+          description: Number of days analyzed
+        value:
+          type: number
+          format: float
+          description: Average valid visitations per day
     Resident_Object:
       type: object
       properties:
