@@ -8,7 +8,7 @@
 
 #### Build & Run
 ```bash
-docker compose up --build
+docker compose up -d
 ```
 
 The app will be accessible at:
@@ -27,6 +27,13 @@ docker compose logs -f
 ```bash
 docker compose down
 ```
+
+#### Applying Changes
+```bash
+docker compose down
+docker compose up -d
+```
+
 
 ---
 
