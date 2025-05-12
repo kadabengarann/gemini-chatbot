@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  wd-chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wd-chatbot-dev
+    ports:
+      - "8080:5005"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command: python main.py
